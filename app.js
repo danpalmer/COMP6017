@@ -37,14 +37,45 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-// app.get('/index.:format?', routes.index);
 
-// app.get('/collections.:format?', collections.list);
-// app.post('/collections.:format?', collections.create);
+// app.post('/user', undefined);
 
-// app.get('/collections/:id.:format?', collections.collection);
-// app.get('/collections/:cid/images.:format?', images.list);
-// app.get('/collections/:cid/images/:id.:format?', images.image);
+// app.get('/user/:id', undefined);
+// app.put('/user/:id', undefined);
+// app.head('/user/:id', undefined);
+// app.delete('/user/:id', undefined);
+
+// app.get('/question', undefined);
+// app.post('/question', undefined);
+
+// app.get('/question/:id', undefined);
+// app.put('/question/:id', undefined);
+// app.head('/question/:id', undefined);
+// app.delete('/question/:id', undefined);
+
+// app.get('/question/:id/comment', undefined);
+// app.post('/question/:id/comment', undefined);
+
+// app.get('/question/:id/comment/:id', undefined);
+// app.put('/question/:id/comment/:id', undefined);
+// app.head('/question/:id/comment/:id', undefined);
+// app.delete('/question/:id/comment/:id', undefined);
+
+// app.get('/question/:id/answer', undefined);
+// app.post('/question/:id/answer', undefined);
+
+// app.get('/question/:id/answer/:id', undefined);
+// app.put('/question/:id/answer/:id', undefined);
+// app.head('/question/:id/answer/:id', undefined);
+// app.delete('/question/:id/answer/:id', undefined);
+
+// app.get('/question/:id/answer/:id/comment', undefined);
+// app.post('/question/:id/answer/:id/comment', undefined);
+
+// app.get('/question/:id/answer/:id/comment/:id', undefined);
+// app.put('/question/:id/answer/:id/comment/:id', undefined);
+// app.head('/question/:id/answer/:id/comment/:id', undefined);
+// app.delete('/question/:id/answer/:id/comment/:id', undefined);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
