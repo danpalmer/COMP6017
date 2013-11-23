@@ -4,6 +4,18 @@ module.exports.define = function(db, models) {
     content:      { type: 'text' },
     dateCreated:  { type: 'date', time: true },
     dateModified: { type: 'date', time: true }
+  }, {
+    methods: {
+      render: function() {
+        return {
+          title: this.title,
+          content: this.content,
+          dateCreated: this.dateCreated,
+          dateModified: this.dateModified,
+          href: '/question/' + this.id
+        }
+      }
+    }
   });
 
   Question.hasOne('author', models.user);

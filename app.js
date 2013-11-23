@@ -50,8 +50,8 @@ app.post('/user', user.create);
 // app.head('/user/:id', undefined);
 // app.delete('/user/:id', undefined);
 
-// app.get('/question', undefined);
-// app.post('/question', undefined);
+app.get('/question', question.list);
+app.post('/question', question.create);
 
 // app.get('/question/:id', undefined);
 // app.put('/question/:id', undefined);
