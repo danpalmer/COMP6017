@@ -1,6 +1,6 @@
 var request = require('request');
 var expect = require('expect.js');
-var host = 'localhost:3000';
+var host = 'http://localhost:3000';
 
 describe('/question', function(){
 
