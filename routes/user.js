@@ -15,11 +15,11 @@ exports.create = function(req, res) {
     name: req.body.name,
     email: req.body.email,
     dateSignedUp: new Date()
-  }, function(err, item) {
-    if (!item) {
+  }, function(err, user) {
+    if (!user) {
       res.json({error: err});
       return res.status(507); // server is unable to store the representation
     }
-    return res.json(item.render());
+    return res.json(user.render());
   });
 };
