@@ -38,6 +38,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
+// app.get('/user', undefined);
 // app.post('/user', undefined);
 
 // app.get('/user/:id', undefined);
