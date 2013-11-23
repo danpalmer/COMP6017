@@ -89,7 +89,7 @@ describe('/question/:id', function(){
 	});
 	*/
 
-	it('server should respond', function(done){
+	it('server should respond for HEAD', function(done){
 		request.head(host + '/question/:id', function(error, response){
 			expect(response).to.not.be(undefined);
 			expect(response).to.not.be(null);
@@ -97,7 +97,7 @@ describe('/question/:id', function(){
 		});
 	});
 	
-	it('should return 200 for GET', function(done){
+	it('should return 200 for HEAD', function(done){
 		request.head(host + '/question/:id', function(error, response){
 			expect(response.statusCode).to.be(200);
 			done();
@@ -106,7 +106,7 @@ describe('/question/:id', function(){
 	
 	it('should return 404 for GET after DELETE', function(done){
 		request.del(host + '/question/:id', function(error, response){
-			request.get(host + 'question/:id', function(error, response){
+			request.get(host + '/question/:id', function(error, response){
 				expect(response.statusCode).to.be(404);
 				done();			
 			});
@@ -187,6 +187,54 @@ describe('/user', function(){
 			expect(body['name']).to.be('foo');
 			expect(body['email']).to.be('bar@example.com');
 			done();
+		});
+	});
+});
+
+describe('/user/:id', function(){	
+	
+	it('server should respond', function(done){
+		request.get(host + '/user/:id', function(error, response){
+			expect(response).to.not.be(undefined);
+			expect(response).to.not.be(null);
+			done();
+		});
+	});
+	
+	it('should return 200 for GET', function(done){
+		request.get(host + '/user/:id', function(error, response){
+			expect(response.statusCode).to.be(200);
+			done();
+		});
+	});
+	
+	/*
+	Needs POST test
+	it('should return 201 created for POST', function(done){
+	});
+	*/
+	
+	it('server should respond for HEAD', function(done){
+		request.head(host + '/user/:id', function(error, response){
+			expect(response).to.not.be(undefined);
+			expect(response).to.not.be(null);
+			done();
+		});
+	});
+	
+	it('should return 200 for HEAD', function(done){
+		request.head(host + '/user/:id', function(error, response){
+			expect(response.statusCode).to.be(200);
+			done();
+		});
+	});
+	
+	it('should return 404 for GET after DELETE', function(done){
+		request.del(host + '/user/:id', function(error, response){
+			request.get(host + '/user/:id', function(error, response){
+				expect(response.statusCode).to.be(404);
+				done();			
+			});
 		});
 	});
 });
