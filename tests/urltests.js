@@ -109,7 +109,7 @@ describe('/question/:id', function(){
 			request.get(host + 'question/:id', function(error, response){
 				expect(response.statusCode).to.be(404);
 				done();			
-			}
+			});
 		});
 	});
 });
@@ -156,4 +156,37 @@ describe('/question/:id/comment', function(){
 	it('should link to a valid user', function(done){	
 	});
 	*/
+});
+
+describe('/user', function(){
+	
+	it('server should respond', function(done){
+		request.get(host + '/user', function(error, response){
+			expect(response).to.not.be(undefined);
+			expect(response).to.not.be(null);
+			done();
+		});
+	});
+	
+	it('should return 200 for GET', function(done){
+		request.get(host + '/user', function(error, response){
+			expect(response.statusCode).to.be(200);
+			done();
+		});
+	});
+		
+	it('should return 201 created for POST', function(done){
+		request.post(host + '/user', {form:{'name':'foo', 'email':'bar@example.com', 'dateSignedUp': Date.now()}}, function(error, response){
+			expect(response.statusCode).to.be(201);
+			done();
+		});
+	});
+	
+	it('should return the correct, new user on POST', function(done){
+		request.post({url:host + '/user', json:true}, {form:{'name':'foo', 'email':'bar@example.com', 'dateSignedUp': Date.now()}}, function(error, response, body){
+			expect(body['name']).to.be('foo');
+			expect(body['email']).to.be('bar@example.com');
+			done();
+		});
+	});
 });
