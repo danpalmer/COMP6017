@@ -11,6 +11,10 @@ var path = require('path');
 var orm = require('orm');
 var models = require('./models');
 var validate = require('express-validator');
+var user = require('./routes/user');
+var question = require('./routes/question');
+var answer = require('./routes/answer');
+var comment = require('./routes/comment');
 
 
 var app = express();
@@ -38,8 +42,8 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
-// app.get('/user', undefined);
-// app.post('/user', undefined);
+app.get('/user', user.list);
+app.post('/user', user.create);
 
 // app.get('/user/:id', undefined);
 // app.put('/user/:id', undefined);
