@@ -53,10 +53,10 @@ app.delete('/user/:uid', user.del);
 app.get('/question', question.list);
 app.post('/question', question.create);
 
-// app.get('/question/:id', undefined);
-// app.put('/question/:id', undefined);
-// app.head('/question/:id', undefined);
-// app.delete('/question/:id', undefined);
+app.get('/question/:qid', question.get);
+app.put('/question/:qid', question.update);
+app.head('/question/:qid', question.get);
+app.delete('/question/:qid', question.del);
 
 // app.get('/question/:id/comment', undefined);
 // app.post('/question/:id/comment', undefined);
