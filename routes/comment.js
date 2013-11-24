@@ -5,8 +5,16 @@ var utils = require('../util.js');
  */
 
 exports.list = function(model, req, res) {
-  req.models[model].get(req.params.rid, function(err, item) {
-    item.getComments(function(err, comments) {
+  req.models[model].get(req.params.rid, function(modelError, item) {
+    if (!item) {
+      res.status(503);
+      return res.json({error: modelError});
+    }
+    item.getComments(function(commentErr, comments) {
+      if (!comments) {
+        res.status(503);
+        return res.json({error: commentErr});
+      }
       res.json(utils.renderModels(comments));
     });
   });
@@ -26,12 +34,12 @@ exports.create = function(model, req, res) {
     req.models[model].get(req.params.rid, function(resourceErr, item) {
       if (!item) {
         res.status(503);
-        return res.json({error: err});
+        return res.json({error: resourceErr});
       }
       item.addComment(comment, function(linkErr) {
         if (err) {
           res.status(503);
-          return res.json({error: err});
+          return res.json({error: linkErr});
         }
         res.status(201);
         return res.json(comment.render());
