@@ -19,7 +19,7 @@ exports.create = function(req, res) {
     author_id: req.body.author_id
   }, function(err, question) {
     if (!question) {
-      res.status(507); // server is unable to store the representation
+      res.status(503); // server is unable to store the representation
       return res.json({error: err});
     }
     res.status(201);
@@ -48,7 +48,7 @@ exports.update = function(req, res) {
     question.dateModified = new Date();
     question.save(function(saveError) {
       if (saveError) {
-        res.status(507); // server is unable to store the representation
+        res.status(503); // server is unable to store the representation
         return res.json({error: saveError});
       }
       res.status(200);
