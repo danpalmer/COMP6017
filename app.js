@@ -45,10 +45,10 @@ app.get('/', routes.index);
 app.get('/user', user.list);
 app.post('/user', user.create);
 
-// app.get('/user/:id', undefined);
-// app.put('/user/:id', undefined);
-// app.head('/user/:id', undefined);
-// app.delete('/user/:id', undefined);
+app.get('/user/:uid', user.get);
+app.put('/user/:uid', user.update);
+app.head('/user/:uid', user.get);
+app.delete('/user/:uid', user.del);
 
 app.get('/question', question.list);
 app.post('/question', question.create);
