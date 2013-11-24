@@ -31,7 +31,7 @@ module.exports.createQuestion = function(userId, callback) {
     form: {
       title: title, 
       content: content,
-      author: userId
+      author_id: userId
     }
   }, function(error, response, question) {
     callback(question);
@@ -45,7 +45,7 @@ module.exports.createAnswer = function(userId, questionId, callback) {
     json: true,
     form: {
       content: content,
-      author: userId
+      author_id: userId
     }
   }, function(error, response, answer) {
     callback(answer);
@@ -65,7 +65,7 @@ module.exports.createComment = function(userId, type, questionId, answerId, call
     json: true,
     form: {
       content: content,
-      author: userId
+      author_id: userId
     }
   }, function(error, response, comment) {
     callback(comment);
