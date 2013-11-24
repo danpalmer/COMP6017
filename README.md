@@ -52,3 +52,6 @@ HTTP Status Codes:
  - Failed to store representation: 503 Service Unavailable
  - Failed to find resource: 404 Not Found
  - Failed to delete resource: 503 Service Unavailable
+ - POST doesn't contain required fields: 400 Bad Request
+ - PUT doesn't contain required fields: 400 Bad Request
+ - POST contains invalid field (e.g. non-existent question for comment): 400 Bad Request
