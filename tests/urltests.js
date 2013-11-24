@@ -54,9 +54,11 @@ describe('/user', function(){
 	});
 	
 	it('should return the correct, new user on POST', function(done){
-		request.post({url:host + '/user', json:true}, {form:{'name':'foo', 'email':'bar@example.com', 'dateSignedUp': Date.now()}}, function(error, response, body){
-			expect(body['name']).to.be('foo');
-			expect(body['email']).to.be('bar@example.com');
+		var name = 'foo';
+		var email = 'foo@bar.com';
+		request.post({url:host + '/user', json:true, form:{name: name, email: email}}, function(error, response, body){
+			expect(body.name).to.be(name);
+			expect(body.email).to.be(email);
 			done();
 		});
 	});
