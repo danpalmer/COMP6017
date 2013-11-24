@@ -20,6 +20,7 @@ exports.create = function(req, res) {
       res.json({error: err});
       return res.status(507); // server is unable to store the representation
     }
+    res.status(201);
     return res.json(user.render());
   });
 };
