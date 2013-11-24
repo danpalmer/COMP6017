@@ -57,7 +57,7 @@ exports.update = function(req, res) {
 exports.del = function(req, res) {
   req.models.user.find({id: req.params.uid}).remove(function(err) {
     if (err) {
-      res.status(500);
+      res.status(503);
       return res.json({error: err});
     }
     res.status(204); // request processed, no content returned
