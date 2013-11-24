@@ -66,13 +66,13 @@ app.put('/question/:qid', question.update);
 app.head('/question/:qid', question.get);
 app.delete('/question/:qid', question.del);
 
-app.get('/question/:rid/comment', comment.list.bind('question'));
-app.post('/question/:rid/comment', comment.create.bind('question'));
+app.get('/question/:rid/comment', comment.list.bind(this, 'question'));
+app.post('/question/:rid/comment', comment.create.bind(this, 'question'));
 
-// app.get('/question/:rid/comment/:cid', undefined);
-// app.put('/question/:rid/comment/:cid', undefined);
-// app.head('/question/:rid/comment/:cid', undefined);
-// app.delete('/question/:rid/comment/:cid', undefined);
+app.get('/question/:rid/comment/:cid', comment.get.bind(this, 'question'));
+app.put('/question/:rid/comment/:cid', comment.update.bind(this, 'question'));
+app.head('/question/:rid/comment/:cid', comment.get.bind(this, 'question'));
+app.delete('/question/:rid/comment/:cid', comment.del.bind(this, 'question'));
 
 // app.get('/question/:qid/answer', undefined);
 // app.post('/question/:qid/answer', undefined);
@@ -82,13 +82,13 @@ app.post('/question/:rid/comment', comment.create.bind('question'));
 // app.head('/question/:qid/answer/:aid', undefined);
 // app.delete('/question/:qid/answer/:aid', undefined);
 
-// app.get('/question/:qid/answer/:rid/comment', undefined);
-// app.post('/question/:qid/answer/:rid/comment', undefined);
+app.get('/question/:qid/answer/:rid/comment', comment.list.bind(this, 'answer'));
+app.post('/question/:qid/answer/:rid/comment', comment.create.bind(this, 'answer'));
 
-// app.get('/question/:qid/answer/:rid/comment/:cid', undefined);
-// app.put('/question/:qid/answer/:rid/comment/:cid', undefined);
-// app.head('/question/:qid/answer/:rid/comment/:cid', undefined);
-// app.delete('/question/:qid/answer/:rid/comment/:cid', undefined);
+app.get('/question/:qid/answer/:rid/comment/:cid', comment.get.bind(this, 'answer'));
+app.put('/question/:qid/answer/:rid/comment/:cid', comment.update.bind(this, 'answer'));
+app.head('/question/:qid/answer/:rid/comment/:cid', comment.get.bind(this, 'answer'));
+app.delete('/question/:qid/answer/:rid/comment/:cid', comment.del.bind(this, 'answer'));
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
