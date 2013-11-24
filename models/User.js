@@ -10,7 +10,8 @@ module.exports.define = function(db, models) {
           name: this.name,
           email: this.email,
           dateSignedUp: this.dateSignedUp,
-          href: '/user/' + this.id
+          href: '/user/' + this.id,
+          id: this.id
         }
       }
     }
