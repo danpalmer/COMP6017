@@ -37,7 +37,20 @@ exports.get = function(req, res) {
 
 exports.update = function(req, res) {
   req.models.user.get(req.params.uid, function(err, user) {
-    
+    if (!user) {
+      res.status(404);
+      return res.json({error: err});
+    }
+    user.name = req.body.name;
+    user.email = req.body.email;
+    user.save(function(saveError) {
+      if (saveError) {
+        res.status(507); // server is unable to store the representation
+        return res.json({error: saveError});
+      }
+      res.status(200);
+      return res.json(user.render());
+    });
   });
 };
 
