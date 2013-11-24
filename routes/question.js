@@ -33,7 +33,8 @@ exports.get = function(req, res) {
       res.status(404);
       return res.json({error: err});
     }
-    res.json(question.render());
+    res.status(200);
+    return res.json(question.render());
   });
 };
 
