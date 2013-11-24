@@ -40,6 +40,14 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+/* URL Parameter Names:
+    :uid - User Id,
+    :qid - Question Id,
+    :cid - Comment Id,
+    :aid - Answer Id,
+    :rid - Resource Id, where the Resource is unknown by the comment model
+*/
+
 app.get('/', routes.index);
 
 app.get('/user', user.list);
@@ -58,29 +66,29 @@ app.put('/question/:qid', question.update);
 app.head('/question/:qid', question.get);
 app.delete('/question/:qid', question.del);
 
-// app.get('/question/:id/comment', undefined);
-// app.post('/question/:id/comment', undefined);
+app.get('/question/:rid/comment', comment.list.bind('question'));
+app.post('/question/:rid/comment', comment.create.bind('question'));
 
-// app.get('/question/:id/comment/:id', undefined);
-// app.put('/question/:id/comment/:id', undefined);
-// app.head('/question/:id/comment/:id', undefined);
-// app.delete('/question/:id/comment/:id', undefined);
+// app.get('/question/:rid/comment/:cid', undefined);
+// app.put('/question/:rid/comment/:cid', undefined);
+// app.head('/question/:rid/comment/:cid', undefined);
+// app.delete('/question/:rid/comment/:cid', undefined);
 
-// app.get('/question/:id/answer', undefined);
-// app.post('/question/:id/answer', undefined);
+// app.get('/question/:qid/answer', undefined);
+// app.post('/question/:qid/answer', undefined);
 
-// app.get('/question/:id/answer/:id', undefined);
-// app.put('/question/:id/answer/:id', undefined);
-// app.head('/question/:id/answer/:id', undefined);
-// app.delete('/question/:id/answer/:id', undefined);
+// app.get('/question/:qid/answer/:aid', undefined);
+// app.put('/question/:qid/answer/:aid', undefined);
+// app.head('/question/:qid/answer/:aid', undefined);
+// app.delete('/question/:qid/answer/:aid', undefined);
 
-// app.get('/question/:id/answer/:id/comment', undefined);
-// app.post('/question/:id/answer/:id/comment', undefined);
+// app.get('/question/:qid/answer/:rid/comment', undefined);
+// app.post('/question/:qid/answer/:rid/comment', undefined);
 
-// app.get('/question/:id/answer/:id/comment/:id', undefined);
-// app.put('/question/:id/answer/:id/comment/:id', undefined);
-// app.head('/question/:id/answer/:id/comment/:id', undefined);
-// app.delete('/question/:id/answer/:id/comment/:id', undefined);
+// app.get('/question/:qid/answer/:rid/comment/:cid', undefined);
+// app.put('/question/:qid/answer/:rid/comment/:cid', undefined);
+// app.head('/question/:qid/answer/:rid/comment/:cid', undefined);
+// app.delete('/question/:qid/answer/:rid/comment/:cid', undefined);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
