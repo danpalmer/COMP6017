@@ -17,7 +17,7 @@ exports.create = function(req, res) {
     dateSignedUp: new Date()
   }, function(err, user) {
     if (!user) {
-      res.status(507); // server is unable to store the representation
+      res.status(503); // server is unable to store the representation
       return res.json({error: err});
     }
     res.status(201);
@@ -45,7 +45,7 @@ exports.update = function(req, res) {
     user.email = req.body.email;
     user.save(function(saveError) {
       if (saveError) {
-        res.status(507); // server is unable to store the representation
+        res.status(503); // server is unable to store the representation
         return res.json({error: saveError});
       }
       res.status(200);
