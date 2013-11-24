@@ -29,9 +29,12 @@ describe('/question', function() {
     });
   });
   
-  it('should return a valid question', function(done) {
-    request.get({url:host + '/question/:id', json:true}, function(error, response, body) {
-      expect(body['content']).to.not.be(null);
+  it('should return a valid question for POST', function(done) {
+    var title = 'title';
+    var content = 'content';
+    request.post({url:host + '/question', json:true, form:{title: title, content: content}}, function(error, response, body) {
+      expect(body.title).to.be(title);
+      expect(body.content).to.be(content);
       done();
     });
   });
