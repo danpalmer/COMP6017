@@ -20,7 +20,6 @@ module.exports.define = function(db, models) {
   });
 
   Question.hasOne('author', models.user);
-  Question.hasMany('comments', models.comment);
 
   return Question;
 };

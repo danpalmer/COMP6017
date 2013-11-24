@@ -9,7 +9,6 @@ module.exports.define = function(db, models) {
   });
 
   Answer.hasOne('author', models.user);
-  Answer.hasMany('comments', models.comment);
 
   return Answer;
 };
