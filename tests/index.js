@@ -4,18 +4,18 @@ var util = require('./util');
 
 var host = util.host;
 
-describe('/', function(){
+describe('/', function() {
   
-  it('server should respond', function(done){
-    request.get(host + '/', function(error, response){
+  it('server should respond', function(done) {
+    request.get(host + '/', function(error, response) {
       expect(response).to.not.be(undefined);
       expect(response).to.not.be(null);
       done();
     });
   });
   
-  it('should return 200 for GET', function(done){
-    request.get(host + '/', function(error, response){
+  it('should return 200 for GET', function(done) {
+    request.get(host + '/', function(error, response) {
       expect(response.statusCode).to.be(200);
       done();
     });
