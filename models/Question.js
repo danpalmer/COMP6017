@@ -12,7 +12,8 @@ module.exports.define = function(db, models) {
           content: this.content,
           dateCreated: this.dateCreated,
           dateModified: this.dateModified,
-          href: '/question/' + this.id
+          href: '/question/' + this.id,
+          id: this.id
         }
       }
     }
