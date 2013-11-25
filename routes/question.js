@@ -1,9 +1,5 @@
 var utils = require('../util.js');
 
-/*
- * GET questions listing.
- */
-
 exports.list = function(req, res) {
   req.models.question.find({}, function(err, questions) {
     res.json(utils.renderModels(questions));

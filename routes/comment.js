@@ -1,9 +1,5 @@
 var utils = require('../util.js');
 
-/*
- * GET questions listing.
- */
-
 exports.list = function(model, req, res) {
   req.models[model].get(req.params.rid, function(modelError, item) {
     if (!item) {

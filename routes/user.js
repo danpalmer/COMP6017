@@ -1,9 +1,5 @@
 var utils = require('../util.js');
 
-/*
- * GET users listing.
- */
-
 exports.list = function(req, res) {
   req.models.user.find({}, function(err, users) {
     res.json(utils.renderModels(users));
