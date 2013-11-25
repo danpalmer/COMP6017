@@ -9,7 +9,8 @@ module.exports.define = function(db, models) {
   });
 
   Answer.hasOne('author', models.user);
-
+  Answer.hasOne('question', models.question);
+  
   return Answer;
 };
 
