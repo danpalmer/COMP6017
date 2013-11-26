@@ -7,32 +7,67 @@ var host = util.host;
 describe('/question/:id/comment', function() {
 
   it('server should respond', function(done) {
-    request.get(host + '/question/:id/comment', function(error, response) {
-      expect(response).to.not.be(undefined);
-      expect(response).to.not.be(null);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.get(host + '/question/' + question.id + '/comment', function(error, response) {
+          expect(response).to.not.be(undefined);
+          expect(response).to.not.be(null);
+          done();
+        });
+      });
     });
   });
-  
+  util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        util.createComment(user.id, util.type.QUESTION, question.id, null, function(comment) {
+          
+        });
+      });
+    });
   it('should return 200 for GET', function(done) {
-    request.get(host + '/question/:id/comment', function(error, response) {
-      expect(response.statusCode).to.be(200);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.get(host + '/question/' + question.id + '/comment', function(error, response) {
+          expect(response.statusCode).to.not.be(200);
+          done();
+        });
+      });
     });
   });
   
   it('should return 201 created for POST', function(done) {
-    //needs author key added to form
-    request.post(host + '/question/:id/comment', {form:{title:'foo', content:'bar?'}}, function(error, response) {
-      expect(response.statusCode).to.be(201);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.post(host + '/question/' + question.id + '/comment', {
+          form: { 
+            content:'test content',
+            author_id: user.id
+          }
+        }, function(error, response) {
+          expect(response.statusCode).to.be(201);
+          done();
+        });
+      });
     });
   });
   
   it('should return a valid comment', function(done) {
-    request.get({url:host + '/question/:id/comment', json:true}, function(error, response, body) {
-      expect(body['content']).to.not.be(null);
-      done();
+    var content = 'lorem ipsum';
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.post({
+          url: host + '/question/' + question.id + '/comment',
+          json: true,
+          form: { 
+            content: content,
+            author_id: user.id
+          }
+        }, function(error, response) {
+          expect(body.content).to.be(content);
+          // TODO: validate returned author id or representation
+          done();
+        });
+      });
     });
   });
   /*

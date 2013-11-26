@@ -7,17 +7,25 @@ var host = util.host;
 describe('/question/:id/answer', function() {
 
   it('server should respond', function(done) {
-    request.get(host + '/question/:id/answer', function(error, response) {
-      expect(response).to.not.be(undefined);
-      expect(response).to.not.be(null);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.get(host + '/question/' + question.id + '/answer', function(error, response) {
+          expect(response).to.not.be(undefined);
+          expect(response).to.not.be(null);
+          done();
+        });
+      });
     });
   });
   
   it('should return 200 for GET', function(done) {
-    request.get(host + '/question/:id/answer', function(error, response) {
-      expect(response.statusCode).to.be(200);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.get(host + '/question/' + question.id + '/answer', function(error, response) {
+          expect(response.statusCode).to.be(200);
+          done();
+        });
+      });
     });
   });
   
@@ -33,9 +41,19 @@ describe('/question/:id/answer', function() {
   */
   
   it('should return a valid answer', function(done) {
-    request.get({url:host + '/question/:id/answer', json:true}, function(error, response, body) {
-      expect(body['content']).to.not.be(null);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        util.createAnswer(user.id, question.id, function(answer) {
+          request.get({
+            url: host + '/question/' + question.id + '/answer/' + answer.id,
+            json: true
+          }, function(error, response, body) {
+            expect(body.id).to.be(answer.id);
+            expect(body.content).to.be(answer.content);
+            done();
+          });
+        });
+      });
     });
   });
   /*
