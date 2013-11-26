@@ -25,7 +25,7 @@ exports.create = function(model, req, res) {
     author_id: req.body.author_id
   };
   newComment[model + '_id'] = req.param.rid;
-  req.models.comment.create(newComment, function(commentErr, comment) {
+  req.models.comment.create(newComment, function(err, comment) {
     if (!comment) {
       res.status(503);
       return res.json({error: err});
