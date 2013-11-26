@@ -11,37 +11,28 @@ exports.list = function(model, req, res) {
         res.status(503);
         return res.json({error: commentErr});
       }
-      res.json(utils.renderModels(comments));
+      res.status(200);
+      return res.json(utils.renderModels(comments));
     });
   });
 };
 
 exports.create = function(model, req, res) {
-  req.models.comment.create({
+  var newComment = {
     content: req.body.content,
     dateCreated: new Date(),
     dateModified: new Date(),
     author_id: req.body.author_id
-  }, function(commentErr, comment) {
+  };
+  newComment[model + '_id'] = req.param.rid;
+  req.models.comment.create(newComment, function(commentErr, comment) {
     if (!comment) {
       res.status(503);
       return res.json({error: err});
     }
-    req.models[model].get(req.params.rid, function(resourceErr, item) {
-      if (!item) {
-        res.status(400); // given item does not exist
-        return res.json({error: resourceErr});
-      }
-      item.addComment(comment, function(linkErr) {
-        if (err) {
-          res.status(503);
-          return res.json({error: linkErr});
-        }
-        res.status(201);
-        return res.json(comment.render());
-      });
-    });
-  })
+    res.status(201);
+    return res.json(comment.render());
+  });
 };
 
 exports.get = function(model, req, res) {

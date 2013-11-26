@@ -31,9 +31,9 @@ module.exports.define = function(db, models) {
     }
   });
 
-  Comment.hasOne('author', models.user);
-  Comment.hasOne('question', models.question);
-  Comment.hasOne('answer', models.answer);
+  Comment.hasOne('author', models.user, { reverse: 'comments' });
+  Comment.hasOne('question', models.question, { reverse: 'comments' });
+  Comment.hasOne('answer', models.answer, { reverse: 'comments' });
 
   return Comment;
 };
