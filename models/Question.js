@@ -8,6 +8,9 @@ module.exports.define = function(db, models) {
     methods: {
       render: function() {
         return {
+          // TODO: return user representation or link
+          // TODO: return answer representations or links
+          // TODO: return comments representations or links
           title: this.title,
           content: this.content,
           dateCreated: this.dateCreated,
