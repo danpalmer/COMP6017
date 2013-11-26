@@ -74,13 +74,13 @@ app.put('/question/:rid/comment/:cid', comment.update.bind(this, 'question'));
 app.head('/question/:rid/comment/:cid', comment.get.bind(this, 'question'));
 app.delete('/question/:rid/comment/:cid', comment.del.bind(this, 'question'));
 
-// app.get('/question/:qid/answer', undefined);
-// app.post('/question/:qid/answer', undefined);
+app.get('/question/:qid/answer', answer.list);
+app.post('/question/:qid/answer', answer.create);
 
-// app.get('/question/:qid/answer/:aid', undefined);
-// app.put('/question/:qid/answer/:aid', undefined);
-// app.head('/question/:qid/answer/:aid', undefined);
-// app.delete('/question/:qid/answer/:aid', undefined);
+app.get('/question/:qid/answer/:aid', answer.get);
+app.put('/question/:qid/answer/:aid', answer.update);
+app.head('/question/:qid/answer/:aid', answer.get);
+app.delete('/question/:qid/answer/:aid', answer.del);
 
 app.get('/question/:qid/answer/:rid/comment', comment.list.bind(this, 'answer'));
 app.post('/question/:qid/answer/:rid/comment', comment.create.bind(this, 'answer'));
