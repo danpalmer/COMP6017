@@ -19,6 +19,7 @@ module.exports.define = function(db, models) {
                 '/comment/' + this.id;
         }
         return {
+          // TODO: return user representation or link?
           content: this.content,
           dateCreated: this.dateCreated,
           dateModified: this.dateModified,
