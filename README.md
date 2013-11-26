@@ -55,3 +55,48 @@ HTTP Status Codes:
  - POST doesn't contain required fields: 400 Bad Request
  - PUT doesn't contain required fields: 400 Bad Request
  - POST contains invalid field (e.g. non-existent question for comment): 400 Bad Request
+
+
+### To Do
+
+ - Validation
+ - Following HREFs on creating models
+   - Create a new item
+   - Check it has an HREF (assert)
+   - Follow the HREF
+   - Check it is the same item
+ - Test PUTs for updates
+   - Making sure the update happens
+   - Check status code
+ - Test DELETEs on all models
+   - "server actually deletes representation"
+   - "server returns 204 when deleting"
+ - Test 404s on all models
+   - Check known non-existent model (i.e. id: 99999)
+   - Check /question/nonexistent
+   - Check /question/nonexistent/comment/nonexistentid
+   - Check /question/real_id/comment/nonexistentid
+   - Check /question/nonexistent/answer/nonexistent/comment/nonexistentid
+   - Check /question/real_id/answer/nonexistent/comment/nonexistentid
+   - Check /question/real_id/answer/real_id/comment/nonexistentid
+ - Test all models (and sub models) contain an HREF
+   - Check where appropriate that they link instead of containing actual representations
+ - Implement 'Last-Modified'
+ - Test last modified not changed on idempotent methods (HEAD, GET)
+ - Test it is changed on POST and PUT
+ - Implement 'ETag'
+ - Implement 'Expires'
+   - Longer expires for individual resources
+   - Shorter expires for things that depend on other resources
+   - Look up good settings for these
+
+ /question
+ 	- Just question objects, link to comment lists, link to author
+ /question/:id
+ 	- Question object, list of comments with authors, gives author, list of answers, with answer authors, answers have link to list of comments.
+ /question/:id/comment
+ 	- List of comments with authors
+ /question/:id/answer
+ 	- List of answers with authors
+ /question/:id/answer/:id/comment
+ 	- List of comments with authors
