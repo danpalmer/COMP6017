@@ -17,18 +17,12 @@ describe('/question/:id/comment', function() {
       });
     });
   });
-  util.createUser(function(user) {
-      util.createQuestion(user.id, function(question) {
-        util.createComment(user.id, util.type.QUESTION, question.id, null, function(comment) {
-          
-        });
-      });
-    });
+  
   it('should return 200 for GET', function(done) {
     util.createUser(function(user) {
       util.createQuestion(user.id, function(question) {
         request.get(host + '/question/' + question.id + '/comment', function(error, response) {
-          expect(response.statusCode).to.not.be(200);
+          expect(response.statusCode).to.be(200);
           done();
         });
       });
@@ -63,7 +57,7 @@ describe('/question/:id/comment', function() {
             author_id: user.id
           }
         }, function(error, response) {
-          expect(body.content).to.be(content);
+          expect(response.body.content).to.be(content);
           // TODO: validate returned author id or representation
           done();
         });
@@ -86,18 +80,34 @@ describe('/question/:id/comment', function() {
 describe('/question/:id/comment/:id', function() {
 
   it('server should respond', function(done) {
-    request.get(host + '/question/:id/comment/:id', function(error, response) {
-      expect(response).to.not.be(undefined);
-      expect(response).to.not.be(null);
-      done();
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+	    util.createUser(function(commenter) {
+	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              expect(response).to.not.be(undefined);
+              expect(response).to.not.be(null);
+              done();
+            });
+		  });
+		});
+      });
     });
   });
-  
+
   it('should return 200 for GET', function(done) {
-    request.get(host + '/question/:id/comment/:id', function(error, response) {
-      expect(response.statusCode).to.be(200);
-      done();
-    });
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+	    util.createUser(function(commenter) {
+	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              expect(response.statusCode).to.be(200);
+              done();
+            });
+          });
+        });
+      });
+	});
   });
   
   /*
@@ -111,12 +121,6 @@ describe('/question/:id/comment/:id', function() {
   });
   */
   
-  it('should return a valid comment', function(done) {
-    request.get({url:host + '/question/:id/comment/:id', json:true}, function(error, response, body) {
-      expect(body['content']).to.not.be(null);
-      done();
-    });
-  });
   /*
   Need author key in POSTed form before test can be done
   it('should have a user', function(done) {
@@ -129,30 +133,53 @@ describe('/question/:id/comment/:id', function() {
   });
   */
 
-  it('server should respond for HEAD', function(done) {
-    request.head(host + '/question/:id/comment/:id', function(error, response) {
-      expect(response).to.not.be(undefined);
-      expect(response).to.not.be(null);
-      done();
-    });
-  });
-  
-  it('should return 200 for HEAD', function(done) {
-    request.head(host + '/question/:id/comment/:id', function(error, response) {
-      expect(response.statusCode).to.be(200);
-      done();
-    });
-  });
-  
-  it('should return 404 for GET after DELETE', function(done) {
-    request.del(host + '/question/:id/comment/:id', function(error, response) {
-      request.get(host + '/question/:id/comment/:id', function(error, response) {
-        expect(response.statusCode).to.be(404);
-        done();     
+  it('server should respond', function(done) {
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+	    util.createUser(function(commenter) {
+	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+            request.head(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              expect(response).to.not.be(undefined);
+              expect(response).to.not.be(null);
+              done();
+            });
+		  });
+		});
       });
     });
   });
-});
-
+  
+  it('should respond 200 for head', function(done) {
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+	    util.createUser(function(commenter) {
+	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+            request.head(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              expect(response.statusCode).to.be(200);
+              done();
+            });
+		  });
+		});
+      });
+    });
+  });
+  
+  it('should respond 200 for head', function(done) {
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+	    util.createUser(function(commenter) {
+	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+                expect(response.statusCode).to.be(404);
+                done();
+              });
+            });
+		  });
+		});
+      });
+    });
+  });
+});  
 // TODO: Tests for /question/:id/answer/:id/comment
 // TODO: Tests for /question/:id/answer/:id/comment/:id
