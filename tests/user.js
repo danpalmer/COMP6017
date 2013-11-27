@@ -84,6 +84,21 @@ describe('/user/:id', function() {
 		});
 	});
 	
+	it('should return 204 for DELETE', function(done) {
+		var name = 'foo';
+		var email = 'foo@bar.com';
+		request.post({url:host + '/user', json:true, form:{name: name, email: email}}, function(error, createResponse, user) {
+			expect(createResponse.statusCode).to.be(201); // created
+			request.get(host + '/user/' + user.id, function(error, getResponse) {
+				expect(getResponse.statusCode).to.be(200); // should return the temporary user
+				request.del(host + '/user/' + user.id, function(error, deleteResponse) {
+					expect(deleteResponse.statusCode).to.be(204); // 204 deleted
+					done();			
+				});
+			});
+		});
+	});
+    
 	it('should return 404 for GET after DELETE', function(done) {
 		var name = 'foo';
 		var email = 'foo@bar.com';
