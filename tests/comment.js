@@ -170,10 +170,10 @@ describe('/question/:id/comment/:id', function() {
 	    util.createUser(function(commenter) {
 	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
           //check if created
-            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-              expect(response.statusCode).to.be(200);
-              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-                expect(response.statusCode).to.be(204);
+            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, checkResponse) {
+              expect(checkResponse.statusCode).to.be(200);
+              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, deleteResponse) {
+                expect(deleteResponse.statusCode).to.be(204);
                 done();
               });
             });
@@ -189,12 +189,12 @@ describe('/question/:id/comment/:id', function() {
 	    util.createUser(function(commenter) {
 	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
             //check if created
-            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-              expect(response.statusCode).to.be(200);
-              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-                expect(response.statusCode).to.be(204);
-                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-                  expect(response.statusCode).to.be(404);
+            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, checkResponse) {
+              expect(checkResponse.statusCode).to.be(200);
+              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, deleteResponse) {
+                expect(deleteResponse.statusCode).to.be(204);
+                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, errorResponse) {
+                  expect(errorResponse.statusCode).to.be(404);
                   done();
                 });
               });

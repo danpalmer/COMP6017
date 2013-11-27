@@ -150,7 +150,7 @@ describe('/question/:id', function() {
     });
   });
   
-    it('should return 404 for GET after DELETE', function(done) {
+  it('should return 404 for GET after DELETE', function(done) {
     util.createUser(function(user) {
       util.createQuestion(user.id, function(question) {
         request.del(host + '/question/' + question.id, function(deleteError, deleteResponse) {
@@ -161,6 +161,13 @@ describe('/question/:id', function() {
           });
         });
       });
+    });
+  });
+  
+  it('should return 404 for nonexistent model', function(done) {
+    request.get(host + '/question/99999', function(error, response) {
+      expect(response.statusCode).to.be(404);
+      done();
     });
   });
 });
