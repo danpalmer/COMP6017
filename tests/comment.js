@@ -164,7 +164,7 @@ describe('/question/:id/comment/:id', function() {
     });
   });
   
-  it('should respond 204 on delete', function(done) {
+  it('should respond 204 on DELETE', function(done) {
     util.createUser(function(user) {
       util.createQuestion(user.id, function(question) {
 	    util.createUser(function(commenter) {
@@ -183,7 +183,7 @@ describe('/question/:id/comment/:id', function() {
     });
   });
 
-  it('should respond 404 on GET after delete', function(done) {
+  it('should respond 404 on GET after DELETE', function(done) {
     util.createUser(function(user) {
       util.createQuestion(user.id, function(question) {
 	    util.createUser(function(commenter) {
@@ -192,6 +192,7 @@ describe('/question/:id/comment/:id', function() {
             request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
               expect(response.statusCode).to.be(200);
               request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+                expect(response.statusCode).to.be(204);
                 request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
                   expect(response.statusCode).to.be(404);
                   done();
