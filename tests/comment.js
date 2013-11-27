@@ -164,14 +164,16 @@ describe('/question/:id/comment/:id', function() {
     });
   });
   
-  it('should respond 200 for head', function(done) {
+  it('should respond 204 on delete', function(done) {
     util.createUser(function(user) {
       util.createQuestion(user.id, function(question) {
 	    util.createUser(function(commenter) {
 	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
-            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-              request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
-                expect(response.statusCode).to.be(404);
+          //check if created
+            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              expect(response.statusCode).to.be(200);
+              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+                expect(response.statusCode).to.be(204);
                 done();
               });
             });
@@ -180,6 +182,29 @@ describe('/question/:id/comment/:id', function() {
       });
     });
   });
-});  
+
+  it('should respond 404 on GET after delete', function(done) {
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+	    util.createUser(function(commenter) {
+	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+            //check if created
+            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+              expect(response.statusCode).to.be(200);
+              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, response) {
+                  expect(response.statusCode).to.be(404);
+                  done();
+                });
+              });
+            });
+		  });
+		});
+      });
+    });
+  });
+
 // TODO: Tests for /question/:id/answer/:id/comment
 // TODO: Tests for /question/:id/answer/:id/comment/:id
+
+});  
