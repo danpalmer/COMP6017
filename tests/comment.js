@@ -204,6 +204,24 @@ describe('/question/:id/comment/:id', function() {
       });
     });
   });
+  
+  it('should return 404 for nonexistent QID + CID', function(done) {
+    request.get(host + '/question/99999/comment/99999', function(error, response) {
+      expect(response.statusCode).to.be(404);
+      done();
+    });
+  });
+  
+   it('should return 404 for existing QID with nonexistant CID', function(done) {
+    util.createUser(function(user) {
+      util.createQuestion(user.id, function(question) {
+        request.get(host + '/question/' + question.id + '/comment/99999', function(error, response) {
+          expect(response.statusCode).to.be(404);
+          done();
+        });
+      });
+    });
+  });
 
 // TODO: Tests for /question/:id/answer/:id/comment
 // TODO: Tests for /question/:id/answer/:id/comment/:id

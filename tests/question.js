@@ -164,7 +164,7 @@ describe('/question/:id', function() {
     });
   });
   
-  it('should return 404 for nonexistent model', function(done) {
+  it('should return 404 for nonexistent QID', function(done) {
     request.get(host + '/question/99999', function(error, response) {
       expect(response.statusCode).to.be(404);
       done();
