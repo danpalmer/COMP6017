@@ -19,7 +19,7 @@ exports.create = function (req, res) {
             return res.json({error: err});
         }
         res.status(201);
-        res.setHeader('Last-Modified', question.lastModified.toUTCString());
+        res.setHeader('Last-Modified', question.dateModified.toUTCString());
         return res.json(question.render());
     });
 };
