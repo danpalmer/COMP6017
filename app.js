@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Module dependencies.
  */
@@ -26,25 +25,25 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.bodyParser());
 app.use(validate());
-app.use(function(req, res, next) {
-  req.uri = req.protocol + '://' + req.get('host') + req.url;
-  next();
+app.use(function (req, res, next) {
+    req.uri = req.protocol + '://' + req.get('host') + req.url;
+    next();
 });
 
 app.use(express.methodOverride());
 app.use(app.router);
 
 // development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+if ('development' === app.get('env')) {
+    app.use(express.errorHandler());
 }
 
 /* URL Parameter Names:
-    :uid - User Id,
-    :qid - Question Id,
-    :cid - Comment Id,
-    :aid - Answer Id,
-    :rid - Resource Id, where the Resource is unknown by the comment model
+        :uid - User Id,
+        :qid - Question Id,
+        :cid - Comment Id,
+        :aid - Answer Id,
+        :rid - Resource Id, where the Resource is unknown by the comment model
 */
 
 app.get('/', routes.index);
@@ -55,7 +54,7 @@ app.post('/user', user.create);
 app.get('/user/:uid', user.get);
 app.put('/user/:uid', user.update);
 app.head('/user/:uid', user.get);
-app.delete('/user/:uid', user.del);
+app.del('/user/:uid', user.del);
 
 app.get('/question', question.list);
 app.post('/question', question.create);
@@ -63,7 +62,7 @@ app.post('/question', question.create);
 app.get('/question/:qid', question.get);
 app.put('/question/:qid', question.update);
 app.head('/question/:qid', question.get);
-app.delete('/question/:qid', question.del);
+app.del('/question/:qid', question.del);
 
 app.get('/question/:rid/comment', comment.list.bind(this, 'question'));
 app.post('/question/:rid/comment', comment.create.bind(this, 'question'));
@@ -71,7 +70,7 @@ app.post('/question/:rid/comment', comment.create.bind(this, 'question'));
 app.get('/question/:rid/comment/:cid', comment.get.bind(this, 'question'));
 app.put('/question/:rid/comment/:cid', comment.update.bind(this, 'question'));
 app.head('/question/:rid/comment/:cid', comment.get.bind(this, 'question'));
-app.delete('/question/:rid/comment/:cid', comment.del.bind(this, 'question'));
+app.del('/question/:rid/comment/:cid', comment.del.bind(this, 'question'));
 
 app.get('/question/:qid/answer', answer.list);
 app.post('/question/:qid/answer', answer.create);
@@ -79,7 +78,7 @@ app.post('/question/:qid/answer', answer.create);
 app.get('/question/:qid/answer/:aid', answer.get);
 app.put('/question/:qid/answer/:aid', answer.update);
 app.head('/question/:qid/answer/:aid', answer.get);
-app.delete('/question/:qid/answer/:aid', answer.del);
+app.del('/question/:qid/answer/:aid', answer.del);
 
 app.get('/question/:qid/answer/:rid/comment', comment.list.bind(this, 'answer'));
 app.post('/question/:qid/answer/:rid/comment', comment.create.bind(this, 'answer'));
@@ -87,8 +86,8 @@ app.post('/question/:qid/answer/:rid/comment', comment.create.bind(this, 'answer
 app.get('/question/:qid/answer/:rid/comment/:cid', comment.get.bind(this, 'answer'));
 app.put('/question/:qid/answer/:rid/comment/:cid', comment.update.bind(this, 'answer'));
 app.head('/question/:qid/answer/:rid/comment/:cid', comment.get.bind(this, 'answer'));
-app.delete('/question/:qid/answer/:rid/comment/:cid', comment.del.bind(this, 'answer'));
+app.del('/question/:qid/answer/:rid/comment/:cid', comment.del.bind(this, 'answer'));
 
-http.createServer(app).listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 });
