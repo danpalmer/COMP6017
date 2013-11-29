@@ -1,63 +1,63 @@
 var utils = require('../util.js');
 
-exports.list = function(req, res) {
-  req.models.user.find({}, function(err, users) {
-    res.json(utils.renderModels(users));
-  });
-};
-
-exports.create = function(req, res) {
-  req.models.user.create({
-    name: req.body.name,
-    email: req.body.email,
-    dateSignedUp: new Date()
-  }, function(err, user) {
-    if (!user) {
-      res.status(503); // server is unable to store the representation
-      return res.json({error: err});
-    }
-    res.status(201);
-    return res.json(user.render());
-  });
-};
-
-exports.get = function(req, res) {
-  req.models.user.get(req.params.uid, function(err, user) {
-    if (!user) {
-      res.status(404);
-      return res.json({error: err});
-    }
-    res.status(200);
-    return res.json(user.render());
-  });
-};
-
-exports.update = function(req, res) {
-  req.models.user.get(req.params.uid, function(err, user) {
-    if (!user) {
-      res.status(404);
-      return res.json({error: err});
-    }
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.save(function(saveError) {
-      if (saveError) {
-        res.status(503); // server is unable to store the representation
-        return res.json({error: saveError});
-      }
-      res.status(200);
-      return res.json(user.render());
+exports.list = function (req, res) {
+    req.models.user.find({}, function (err, users) {
+        res.json(utils.renderModels(users));
     });
-  });
 };
 
-exports.del = function(req, res) {
-  req.models.user.find({id: req.params.uid}).remove(function(err) {
-    if (err) {
-      res.status(503);
-      return res.json({error: err});
-    }
-    res.status(204); // request processed, no content returned
-    return res.json({deleted: true});
-  });
+exports.create = function (req, res) {
+    req.models.user.create({
+        name: req.body.name,
+        email: req.body.email,
+        dateSignedUp: new Date()
+    }, function (err, user) {
+        if (!user) {
+            res.status(503); // server is unable to store the representation
+            return res.json({error: err});
+        }
+        res.status(201);
+        return res.json(user.render());
+    });
+};
+
+exports.get = function (req, res) {
+    req.models.user.get(req.params.uid, function (err, user) {
+        if (!user) {
+            res.status(404);
+            return res.json({error: err});
+        }
+        res.status(200);
+        return res.json(user.render());
+    });
+};
+
+exports.update = function (req, res) {
+    req.models.user.get(req.params.uid, function (err, user) {
+        if (!user) {
+            res.status(404);
+            return res.json({error: err});
+        }
+        user.name = req.body.name;
+        user.email = req.body.email;
+        user.save(function (saveError) {
+            if (saveError) {
+                res.status(503); // server is unable to store the representation
+                return res.json({error: saveError});
+            }
+            res.status(200);
+            return res.json(user.render());
+        });
+    });
+};
+
+exports.del = function (req, res) {
+    req.models.user.find({id: req.params.uid}).remove(function (err) {
+        if (err) {
+            res.status(503);
+            return res.json({error: err});
+        }
+        res.status(204); // request processed, no content returned
+        return res.json({deleted: true});
+    });
 };

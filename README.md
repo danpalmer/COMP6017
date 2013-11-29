@@ -89,6 +89,7 @@ HTTP Status Codes:
    - Longer expires for individual resources
    - Shorter expires for things that depend on other resources
    - Look up good settings for these
+ - Test whether returned objects (for GET) are valid
 
  /question
  	- Just question objects, link to comment lists, link to author

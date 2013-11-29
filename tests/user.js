@@ -1,42 +1,43 @@
+/* global describe: true, it: true */
 var request = require('request');
 var expect = require('expect.js');
 var util = require('./util');
 
 var host = util.host;
 
-describe('/user', function() {
-	
-	it('server should respond', function(done) {
-		request.get(host + '/user', function(error, response) {
-			expect(response).to.not.be(undefined);
-			expect(response).to.not.be(null);
-			done();
-		});
-	});
-	
-	it('should return 200 for GET', function(done) {
-		request.get(host + '/user', function(error, response) {
-			expect(response.statusCode).to.be(200);
-			done();
-		});
-	});
+describe('/user', function () {
 
-	it('should return 201 created for POST', function(done) {
-		request.post(host + '/user', {form:{'name':'foo', 'email':'bar@example.com', 'dateSignedUp': Date.now()}}, function(error, response) {
-			expect(response.statusCode).to.be(201);
-			done();
-		});
-	});
-	
-	it('should return the correct, new user on POST', function(done) {
-		var name = 'foo';
-		var email = 'foo@bar.com';
-		request.post({url:host + '/user', json:true, form:{name: name, email: email}}, function(error, response, body) {
-			expect(body.name).to.be(name);
-			expect(body.email).to.be(email);
-			done();
-		});
-	});
+    it('server should respond', function (done) {
+        request.get(host + '/user', function (error, response) {
+            expect(response).to.not.be(undefined);
+            expect(response).to.not.be(null);
+            done();
+        });
+    });
+
+    it('should return 200 for GET', function (done) {
+        request.get(host + '/user', function (error, response) {
+            expect(response.statusCode).to.be(200);
+            done();
+        });
+    });
+
+    it('should return 201 created for POST', function (done) {
+        request.post(host + '/user', {form: {'name': 'foo', 'email': 'bar@example.com', 'dateSignedUp': Date.now()}}, function (error, response) {
+            expect(response.statusCode).to.be(201);
+            done();
+        });
+    });
+
+    it('should return the correct, new user on POST', function (done) {
+        var name = 'foo',
+            email = 'foo@bar.com';
+        request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, response, body) {
+            expect(body.name).to.be(name);
+            expect(body.email).to.be(email);
+            done();
+        });
+    });
 
 });
 
@@ -117,8 +118,8 @@ describe('/user/:id', function() {
 		});
 	});
 
-	// PUT should update an existing user
-	// PUT should return 404 for unknown user
-	// DELETE should return 404 for unknown user
+    // PUT should update an existing user
+    // PUT should return 404 for unknown user
+    // DELETE should return 404 for unknown user
 
 });

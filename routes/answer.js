@@ -1,65 +1,65 @@
 var utils = require('../util.js');
 
-exports.list = function(req, res) {
-  req.models.answer.find({question_id: req.params.qid}, function(err, answers) {
-    res.json(utils.renderModels(answers));
-  });
-};
-
-exports.create = function(req, res) {
-  req.models.answer.create({
-    content: req.body.content,
-    author_id: req.body.author_id,
-    dateCreated: new Date(),
-    dateModified: new Date()
-  }, function(err, answer) {
-    if (!answer) {
-      res.status(503); // server is unable to store the representation
-      return res.json({error: err});
-    }
-    res.status(201);
-    return res.json(answer.render());
-  });
-};
-
-exports.get = function(req, res) {
-  req.models.answer.get(req.params.aid, function(err, answer) {
-    if (!answer) {
-      res.status(404);
-      return res.json({error: err});
-    }
-    res.status(200);
-    return res.json(answer.render());
-  });
-};
-
-exports.update = function(req, res) {
-  req.models.answer.get(req.params.aid, function(err, answer) {
-    if (!answer) {
-      res.status(404);
-      return res.json({error: err});
-    }
-    answer.content = req.body.content;
-    answer.author_id = req.body.author_id;
-    answer.dateModified = new Date();
-    answer.save(function(saveError) {
-      if (saveError) {
-        res.status(503); // server is unable to store the representation
-        return res.json({error: saveError});
-      }
-      res.status(200);
-      return res.json(answer.render());
+exports.list = function (req, res) {
+    req.models.answer.find({question_id: req.params.qid}, function (err, answers) {
+        res.json(utils.renderModels(answers));
     });
-  });
 };
 
-exports.del = function(req, res) {
-  req.models.answer.find({id: req.params.aid}).remove(function(err) {
-    if (err) {
-      res.status(503);
-      return res.json({error: err});
-    }
-    res.status(204); // request processed, no content returned
-    return res.json({deleted: true});
-  });
+exports.create = function (req, res) {
+    req.models.answer.create({
+        content: req.body.content,
+        author_id: req.body.author_id,
+        dateCreated: new Date(),
+        dateModified: new Date()
+    }, function (err, answer) {
+        if (!answer) {
+            res.status(503); // server is unable to store the representation
+            return res.json({error: err});
+        }
+        res.status(201);
+        return res.json(answer.render());
+    });
+};
+
+exports.get = function (req, res) {
+    req.models.answer.get(req.params.aid, function (err, answer) {
+        if (!answer) {
+            res.status(404);
+            return res.json({error: err});
+        }
+        res.status(200);
+        return res.json(answer.render());
+    });
+};
+
+exports.update = function (req, res) {
+    req.models.answer.get(req.params.aid, function (err, answer) {
+        if (!answer) {
+            res.status(404);
+            return res.json({error: err});
+        }
+        answer.content = req.body.content;
+        answer.author_id = req.body.author_id;
+        answer.dateModified = new Date();
+        answer.save(function (saveError) {
+            if (saveError) {
+                res.status(503); // server is unable to store the representation
+                return res.json({error: saveError});
+            }
+            res.status(200);
+            return res.json(answer.render());
+        });
+    });
+};
+
+exports.del = function (req, res) {
+    req.models.answer.find({id: req.params.aid}).remove(function (err) {
+        if (err) {
+            res.status(503);
+            return res.json({error: err});
+        }
+        res.status(204); // request processed, no content returned
+        return res.json({deleted: true});
+    });
 };
