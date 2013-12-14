@@ -2,6 +2,12 @@ var utils = require('../util.js');
 var _ = require('underscore');
 
 exports.list = function (req, res) {
+    req.assert('qid', 'question ID must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.answer.find({question_id: req.params.qid}, function (err, answers) {
         res.status(200);
         if (answers.length) {
