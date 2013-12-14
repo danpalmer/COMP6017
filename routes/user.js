@@ -25,7 +25,7 @@ exports.create = function (req, res) {
         }
         res.status(201);
         res.setHeader('Last-Modified', user.dateModified.toUTCString());
-        return res.json(user.render());
+        return res.json(user.renderLong());
     });
 };
 
@@ -37,7 +37,7 @@ exports.get = function (req, res) {
         }
         res.status(200);
         res.setHeader('Last-Modified', user.dateModified.toUTCString());
-        return res.json(user.render());
+        return res.json(user.renderLong());
     });
 };
 
@@ -57,7 +57,7 @@ exports.update = function (req, res) {
             }
             res.status(200);
             res.setHeader('Last-Modified', user.dateModified.toUTCString());
-            return res.json(user.render());
+            return res.json(user.renderLong());
         });
     });
 };

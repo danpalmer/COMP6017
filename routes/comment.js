@@ -29,15 +29,28 @@ exports.create = function (model, req, res) {
         dateModified: new Date(),
         author_id: req.body.author_id
     };
-    newComment[model + '_id'] = req.param.rid;
+
+    if (model === 'question') {
+        newComment.question_id = req.params.rid;
+    } else if (model === 'answer') {
+        newComment.question_id = req.params.qid;
+        newComment.answer_id = req.params.aid;
+    }
+
     req.models.comment.create(newComment, function (err, comment) {
         if (!comment) {
             res.status(503);
             return res.json({error: err});
         }
-        res.status(201);
-        res.setHeader('Last-Modified', comment.dateModified.toUTCString());
-        return res.json(comment.render());
+        // Note: we need to ask for the question again in order for NodeORM to fill
+        // associations. See this issue:
+        // https://github.com/dresende/node-orm2/issues/406
+        req.models.comment.get(comment.id, function (cErr, fullComment) {
+            console.log(JSON.stringify(fullComment));
+            res.status(201);
+            res.setHeader('Last-Modified', fullComment.dateModified.toUTCString());
+            return res.json(fullComment.renderLong());
+        });
     });
 };
 
@@ -49,7 +62,7 @@ exports.get = function (model, req, res) {
         }
         res.status(200);
         res.setHeader('Last-Modified', comment.dateModified.toUTCString());
-        return res.json(comment.render());
+        return res.json(comment.renderLong());
     });
 };
 
@@ -68,7 +81,7 @@ exports.update = function (model, req, res) {
             }
             res.status(200);
             res.setHeader('Last-Modified', comment.dateModified.toUTCString());
-            return res.json(comment.render());
+            return res.json(comment.renderLong());
         });
     });
 };

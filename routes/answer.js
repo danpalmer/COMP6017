@@ -23,9 +23,14 @@ exports.create = function (req, res) {
             res.status(503); // server is unable to store the representation
             return res.json({error: err});
         }
-        res.status(201);
-        res.setHeader('Last-Modified', answer.dateModified.toUTCString());
-        return res.json(answer.render());
+        // Note: we need to ask for the question again in order for NodeORM to fill
+        // associations. See this issue:
+        // https://github.com/dresende/node-orm2/issues/406
+        req.models.answer.get(answer.id, function (aErr, fullAnswer) {
+            res.status(201);
+            res.setHeader('Last-Modified', fullAnswer.dateModified.toUTCString());
+            return res.json(fullAnswer.renderLong());
+        });
     });
 };
 
@@ -37,7 +42,7 @@ exports.get = function (req, res) {
         }
         res.status(200);
         res.setHeader('Last-Modified', answer.dateModified.toUTCString());
-        return res.json(answer.render());
+        return res.json(answer.renderLong());
     });
 };
 
@@ -57,7 +62,7 @@ exports.update = function (req, res) {
             }
             res.status(200);
             res.setHeader('Last-Modified', answer.dateModified.toUTCString());
-            return res.json(answer.render());
+            return res.json(answer.renderLong());
         });
     });
 };

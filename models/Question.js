@@ -1,3 +1,5 @@
+var utils = require('../util.js');
+
 module.exports.define = function (db, models) {
     var Question = db.define('question', {
         title:        { type: 'text', size: 50 },
@@ -5,19 +7,37 @@ module.exports.define = function (db, models) {
         dateCreated:  { type: 'date', time: true },
         dateModified: { type: 'date', time: true }
     }, {
+        autoFetch: true,
         methods: {
-            render: function () {
+            renderLong: function () {
                 return {
-                    // TODO: return user representation or link
-                    // TODO: return answer representations or links
-                    // TODO: return comments representations or links
                     title: this.title,
                     content: this.content,
                     dateCreated: this.dateCreated,
                     dateModified: this.dateModified,
-                    href: '/question/' + this.id,
-                    id: this.id
+                    href: this.href(),
+                    id: this.id,
+                    user: this.author.renderLong(),
+                    answers: utils.renderModels(this.answers),
+                    comments: utils.renderModels(this.comments)
+
                 };
+            },
+            renderShort: function () {
+                return {
+                    title: this.title,
+                    content: this.content,
+                    dateCreated: this.dateCreated,
+                    dateModified: this.dateModified,
+                    href: this.href(),
+                    id: this.id,
+                    user: this.author.href(),
+                    answers: this.href() + '/answer',
+                    comments: this.href() + '/comments'
+                };
+            },
+            href: function () {
+                return '/question/' + this.id;
             }
         }
     });

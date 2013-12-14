@@ -6,8 +6,23 @@ module.exports.define = function (db, models) {
         dateCreated:  { type: 'date', time: true },
         dateModified: { type: 'date', time: true }
     }, {
+        autoFetch: true,
         methods: {
-            render: function () {
+            renderLong: function () {
+                return {
+                    content: this.content,
+                    dateCreated: this.dateCreated,
+                    dateModified: this.dateModified,
+                    author: this.author_id,
+                    href: this.href(),
+                    id: this.id,
+                    user: this.author.renderLong()
+                };
+            },
+            renderShort: function () {
+                return this.renderLong();
+            },
+            href: function () {
                 var url, answer;
                 if (this.answer_id) {
                     answer = this.getAnswer();
@@ -18,15 +33,7 @@ module.exports.define = function (db, models) {
                     url = '/question/' + this.question_id +
                                 '/comment/' + this.id;
                 }
-                return {
-                    // TODO: return user representation or link?
-                    content: this.content,
-                    dateCreated: this.dateCreated,
-                    dateModified: this.dateModified,
-                    author: this.author_id,
-                    href: url,
-                    id: this.id
-                };
+                return url;
             }
         }
     });
