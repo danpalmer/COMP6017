@@ -8,6 +8,8 @@ module.exports.define = function (db, models) {
         dateModified: { type: 'date', time: true }
     }, {
         autoFetch: true,
+        // We may need the authors of comments on answers...
+        autoFetchLimit: 3,
         methods: {
             renderLong: function () {
                 return {
