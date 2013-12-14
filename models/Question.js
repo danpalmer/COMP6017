@@ -1,8 +1,8 @@
 module.exports.define = function (db, models) {
     var Question = db.define('question', {
-        title:                { type: 'text', size: 50 },
-        content:            { type: 'text' },
-        dateCreated:    { type: 'date', time: true },
+        title:        { type: 'text', size: 50 },
+        content:      { type: 'text' },
+        dateCreated:  { type: 'date', time: true },
         dateModified: { type: 'date', time: true }
     }, {
         methods: {
