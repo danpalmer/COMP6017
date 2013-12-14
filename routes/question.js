@@ -13,6 +13,14 @@ exports.list = function (req, res) {
 };
 
 exports.create = function (req, res) {
+    req.checkBody('content', 'content cannot be empty').notEmpty();
+    req.checkBody('author_id', 'author_id must be given').isInt();
+    req.checkBody('title', 'title cannot be empty').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.question.create({
         title: req.body.title,
         content: req.body.content,
@@ -36,6 +44,12 @@ exports.create = function (req, res) {
 };
 
 exports.get = function (req, res) {
+    req.assert('qid', 'question ID must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.question.get(req.params.qid, function (err, question) {
         if (!question) {
             res.status(404);
@@ -48,6 +62,14 @@ exports.get = function (req, res) {
 };
 
 exports.update = function (req, res) {
+    req.checkBody('content', 'content cannot be empty').notEmpty();
+    req.checkBody('author_id', 'author_id must be given').isInt();
+    req.checkBody('title', 'title cannot be empty').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.question.get(req.params.qid, function (err, question) {
         if (!question) {
             res.status(404);
@@ -69,6 +91,12 @@ exports.update = function (req, res) {
 };
 
 exports.del = function (req, res) {
+    req.assert('qid', 'question ID must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.question.find({id: req.params.qid}).remove(function (err) {
         if (err) {
             res.status(503);
