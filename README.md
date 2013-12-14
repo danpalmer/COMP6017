@@ -59,7 +59,6 @@ HTTP Status Codes:
 
 ### To Do
 
- - Validation
  - Following HREFs on creating models
    - Create a new item
    - Check it has an HREF (assert)
