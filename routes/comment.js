@@ -1,4 +1,5 @@
 var utils = require('../util.js');
+var _ = require('underscore');
 
 exports.list = function (model, req, res) {
     req.models[model].get(req.params.rid, function (modelError, item) {
@@ -12,6 +13,8 @@ exports.list = function (model, req, res) {
                 return res.json({error: commentErr});
             }
             res.status(200);
+            var latest = _.max(comments, function (c) { return c.dateModified; });
+            res.setHeader('Last-Modified', latest.dateModified.toUTCString());
             return res.json(utils.renderModels(comments));
         });
     });
@@ -31,6 +34,7 @@ exports.create = function (model, req, res) {
             return res.json({error: err});
         }
         res.status(201);
+        res.setHeader('Last-Modified', comment.dateModified.toUTCString());
         return res.json(comment.render());
     });
 };
@@ -42,6 +46,7 @@ exports.get = function (model, req, res) {
             return res.json({error: err});
         }
         res.status(200);
+        res.setHeader('Last-Modified', comment.dateModified.toUTCString());
         return res.json(comment.render());
     });
 };
@@ -60,6 +65,7 @@ exports.update = function (model, req, res) {
                 return res.json({error: saveError});
             }
             res.status(200);
+            res.setHeader('Last-Modified', comment.dateModified.toUTCString());
             return res.json(comment.render());
         });
     });

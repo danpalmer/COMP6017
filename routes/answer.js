@@ -1,7 +1,11 @@
 var utils = require('../util.js');
+var _ = require('underscore');
 
 exports.list = function (req, res) {
     req.models.answer.find({question_id: req.params.qid}, function (err, answers) {
+        res.status(200);
+        var latest = _.max(answers, function (a) { return a.dateModified; });
+        res.setHeader('Last-Modified', latest.dateModified.toUTCString());
         res.json(utils.renderModels(answers));
     });
 };
@@ -18,6 +22,7 @@ exports.create = function (req, res) {
             return res.json({error: err});
         }
         res.status(201);
+        res.setHeader('Last-Modified', answer.dateModified.toUTCString());
         return res.json(answer.render());
     });
 };
@@ -29,6 +34,7 @@ exports.get = function (req, res) {
             return res.json({error: err});
         }
         res.status(200);
+        res.setHeader('Last-Modified', answer.dateModified.toUTCString());
         return res.json(answer.render());
     });
 };
@@ -48,6 +54,7 @@ exports.update = function (req, res) {
                 return res.json({error: saveError});
             }
             res.status(200);
+            res.setHeader('Last-Modified', answer.dateModified.toUTCString());
             return res.json(answer.render());
         });
     });
