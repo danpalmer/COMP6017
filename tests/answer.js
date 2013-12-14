@@ -89,4 +89,18 @@ describe('/question/:id/answer/:id', function () {
         });
     });
     
+    it('should return 200 for GET', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.get(host + '/question/' + question.id + '/answer/' + answer.id, function (error, response) {
+                            expect(response.statusCode).to.be(200);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
