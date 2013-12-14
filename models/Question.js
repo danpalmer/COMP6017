@@ -35,7 +35,7 @@ module.exports.define = function (db, models) {
                     id: this.id,
                     user: this.author.href(),
                     answers: this.href() + '/answer',
-                    comments: this.href() + '/comments'
+                    comments: this.href() + '/comment'
                 };
             },
             href: function () {
