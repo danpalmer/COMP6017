@@ -29,17 +29,26 @@ describe('/question/:id/answer', function () {
             });
         });
     });
-
-    /*
-    POST tests need writing later
-    it('should return 201 created for POST', function(done) {
-        //needs author key added to form
-        request.post(host + '/question/:id/answer', {form:{title:'foo', content:'bar?'}}, function(error, response) {
-            expect(response.statusCode).to.be(201);
-            done();
+    
+    it('should return 201 created for POST', function (done) {
+        var content = 'content';
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    request.post({
+                        url: host + '/question/' + question.id + '/answer',
+                        form: {
+                            content: content,
+                            author_id: answerer.id
+                        }
+                    }, function (error, response) {
+                        expect(response.statusCode).to.be(201);
+                        done();
+                    });
+                });
+            });
         });
     });
-    */
 
     it('should return a valid answer', function (done) {
         util.createUser(function (user) {
@@ -69,7 +78,6 @@ describe('/question/:id/answer', function () {
     });
     */
 });
-
 
 describe('/question/:id/answer/:id', function () {
 

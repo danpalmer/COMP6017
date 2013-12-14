@@ -21,16 +21,25 @@ describe('/question', function () {
             done();
         });
     });
-
-    // it('should return 201 created for POST', function (done) {
-    //     // Needs author key added to form
-    //     // This messes up other tests otherwise, as there is no validation and therefore
-    //     // it isn't rejected as being invalid.
-    //     request.post(host + '/question', {form: {title: 'foo', content: 'bar?'}}, function (error, response) {
-    //         expect(response.statusCode).to.be(201);
-    //         done();
-    //     });
-    // });
+    
+    it('should return 201 created for POST', function (done) {
+        var title = 'title',
+            content = 'content';
+        util.createUser(function (user) {
+            request.post({
+                url: host + '/question',
+                json: true,
+                form: {
+                    title: title,
+                    content: content,
+                    author_id: user.id
+                }
+            }, function (error, response) {
+                expect(response.statusCode).to.be(201);
+                done();
+            });
+        });
+    });
 
     // it('should return a valid question for POST', function (done) {
     //     // Needs author key added to form
@@ -81,25 +90,6 @@ describe('/question/:id', function () {
                     expect(response.statusCode).to.be(200);
                     done();
                 });
-            });
-        });
-    });
-
-    it('should return 201 created for POST', function (done) {
-        var title = 'title',
-            content = 'content';
-        util.createUser(function (user) {
-            request.post({
-                url: host + '/question',
-                json: true,
-                form: {
-                    title: title,
-                    content: content,
-                    author_id: user.id
-                }
-            }, function (error, response) {
-                expect(response.statusCode).to.be(201);
-                done();
             });
         });
     });
