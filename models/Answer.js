@@ -1,5 +1,6 @@
 var User = require('./User');
 var Comment = require('./Comment');
+var utils = require('../util.js');
 
 module.exports.define = function (db, models) {
     var Answer = db.define('answer', {
@@ -11,24 +12,24 @@ module.exports.define = function (db, models) {
         methods: {
             renderLong: function () {
                 return {
-                    // TODO: return user representation or link
-                    // TODO: return question representation or link
+                    author: this.author.renderLong(),
                     content: this.content,
                     dateCreated: this.dateCreated,
                     dateModified: this.dateModified,
                     href: this.href(),
-                    id: this.id
+                    id: this.id,
+                    comments: utils.renderModels(this.comments)
                 };
             },
             renderShort: function () {
                 return {
-                    // TODO: return user representation or link
-                    // TODO: return question representation or link
+                    author: this.author.renderLong(),
                     content: this.content,
                     dateCreated: this.dateCreated,
                     dateModified: this.dateModified,
                     href: this.href(),
-                    id: this.id
+                    id: this.id,
+                    comments: this.href() + '/comment'
                 };
             },
             href: function () {
