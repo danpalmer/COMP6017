@@ -19,7 +19,7 @@ module.exports.define = function (db, models) {
                     dateModified: this.dateModified,
                     href: this.href(),
                     id: this.id,
-                    user: this.author.renderLong(),
+                    author: this.author.renderLong(),
                     answers: utils.renderModels(this.answers),
                     comments: utils.renderModels(this.comments)
 
@@ -33,9 +33,9 @@ module.exports.define = function (db, models) {
                     dateModified: this.dateModified,
                     href: this.href(),
                     id: this.id,
-                    user: this.author.href(),
+                    author: this.author.href(),
                     answers: this.href() + '/answer',
-                    comments: this.href() + '/comments'
+                    comments: this.href() + '/comment'
                 };
             },
             href: function () {
