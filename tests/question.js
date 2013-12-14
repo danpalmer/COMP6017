@@ -93,13 +93,24 @@ describe('/question/:id', function () {
             });
         });
     });
-
+    
     it('should return a valid question', function (done) {
-        request.get({url: host + '/question/:id', json: true}, function (error, response, body) {
-            expect(body.content).to.not.be(null);
-            done();
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.get({
+                    url: host + '/question/' + question.id,
+                    json: true
+                }, function (error, response, body) {
+                    expect(body.id).to.be(question.id);
+                    expect(body.title).to.be(question.title);
+                    expect(body.content).to.be(question.content);
+                    expect(body.author).to.be(question.author_id);
+                    done();
+                });
+            });
         });
     });
+    
     /*
     Need author key in POSTed form before test can be done
     it('should have a user', function (done) {

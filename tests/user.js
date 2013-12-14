@@ -28,17 +28,6 @@ describe('/user', function () {
             done();
         });
     });
-
-    it('should return the correct, new user on POST', function (done) {
-        var name = 'foo',
-            email = 'foo@bar.com';
-        request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, response, body) {
-            expect(body.name).to.be(name);
-            expect(body.email).to.be(email);
-            done();
-        });
-    });
-
 });
 
 describe('/user/:id', function() {	
@@ -61,6 +50,20 @@ describe('/user/:id', function() {
 			});
 		});
 	});
+
+    it('should return a valid user', function (done) {
+        util.createUser(function (user) {
+            request.get({
+                url: host + '/user/' + user.id,
+                json: true
+            }, function (error, response, body) {
+                expect(body.id).to.be(user.id);
+                expect(body.name).to.be(user.name);
+                expect(body.email).to.be(user.email);
+                done();
+            });
+        });
+    });
 	
 	it('server should respond for HEAD', function(done) {
 		var name = 'foo';

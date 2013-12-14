@@ -31,35 +31,17 @@ describe('/question/:id/comment', function () {
     });
 
     it('should return 201 created for POST', function (done) {
-        util.createUser(function (user) {
-            util.createQuestion(user.id, function (question) {
-                request.post(host + '/question/' + question.id + '/comment', {
-                    form: {
-                        content: 'test content',
-                        author_id: user.id
-                    }
-                }, function (error, response) {
-                    expect(response.statusCode).to.be(201);
-                    done();
-                });
-            });
-        });
-    });
-
-    it('should return a valid comment', function (done) {
         var content = 'lorem ipsum';
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 request.post({
                     url: host + '/question/' + question.id + '/comment',
-                    json: true,
                     form: {
                         content: content,
                         author_id: user.id
                     }
                 }, function (error, response) {
-                    expect(response.body.content).to.be(content);
-                    // TODO: validate returned author id or representation
+                    expect(response.statusCode).to.be(201);
                     done();
                 });
             });
@@ -111,16 +93,25 @@ describe('/question/:id/comment/:id', function () {
         });
     });
 
-    /*
-    Needs POST implementation definitions first befre test can be properly written
-    it('should return 201 created for POST', function (done) {
-        //needs author key added to form
-        request.post(host + '/question/:id/comment/:id', {form:{title:'foo', content:'bar?'}}, function (error, response) {
-            expect(response.statusCode).to.be(201);
-            done();
+    it('should return a valid comment', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        request.get({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true
+                        }, function (error, response, body) {
+                            expect(body.id).to.be(comment.id);
+                            expect(body.content).to.be(comment.content);
+                            expect(body.author).to.be(commenter.id);
+                            done();
+                        });
+                    });
+                });
+            });
         });
     });
-    */
 
     /*
     Need author key in POSTed form before test can be done
@@ -311,4 +302,27 @@ describe('/question/:id/answer/:id/comment/:id', function () {
         });
     });
 
+    it('should return a valid comment', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                request.get({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true
+                                }, function (error, response, body) {
+                                    expect(body.id).to.be(comment.id);
+                                    expect(body.content).to.be(comment.content);
+                                    expect(body.author).to.be(commenter.id);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

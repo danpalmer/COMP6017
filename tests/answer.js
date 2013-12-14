@@ -49,23 +49,6 @@ describe('/question/:id/answer', function () {
             });
         });
     });
-
-    it('should return a valid answer', function (done) {
-        util.createUser(function (user) {
-            util.createQuestion(user.id, function (question) {
-                util.createAnswer(user.id, question.id, function (answer) {
-                    request.get({
-                        url: host + '/question/' + question.id + '/answer/' + answer.id,
-                        json: true
-                    }, function (error, response, body) {
-                        expect(body.id).to.be(answer.id);
-                        expect(body.content).to.be(answer.content);
-                        done();
-                    });
-                });
-            });
-        });
-    });
     /*
     Need author key in POSTed form before test can be done
     it('should have a user', function(done) {
@@ -104,6 +87,26 @@ describe('/question/:id/answer/:id', function () {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         request.get(host + '/question/' + question.id + '/answer/' + answer.id, function (error, response) {
                             expect(response.statusCode).to.be(200);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return a valid answer', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.get({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
+                            json: true
+                        }, function (error, response, body) {
+                            expect(body.id).to.be(answer.id);
+                            expect(body.content).to.be(answer.content);
+                            expect(body.author).to.be(answer.author_id);
                             done();
                         });
                     });
