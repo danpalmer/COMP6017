@@ -134,22 +134,6 @@ describe('/question/:id/comment/:id', function () {
     });
     */
 
-    it('server should respond', function (done) {
-        util.createUser(function (user) {
-            util.createQuestion(user.id, function (question) {
-                util.createUser(function (commenter) {
-                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
-                        request.head(host + '/question/' + question.id + '/comment/' + comment.id, function (error, response) {
-                            expect(response).to.not.be(undefined);
-                            expect(response).to.not.be(null);
-                            done();
-                        });
-                    });
-                });
-            });
-        });
-    });
-
     it('should respond 200 for head', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -226,4 +210,48 @@ describe('/question/:id/comment/:id', function () {
 // TODO: Tests for /question/:id/answer/:id/comment
 // TODO: Tests for /question/:id/answer/:id/comment/:id
 
-});  
+});
+
+describe('/question/:id/answer/:id/comment', function () {
+
+    it('server should respond', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment', function (error, response) {
+                            expect(response).to.not.be(undefined);
+                            expect(response).to.not.be(null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+});
+
+describe('/question/:id/answer/:id/comment/:id', function () {
+
+    it('server should respond', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                                request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
+                                    expect(response).to.not.be(undefined);
+                                    expect(response).to.not.be(null);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+});

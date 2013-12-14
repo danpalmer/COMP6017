@@ -69,3 +69,24 @@ describe('/question/:id/answer', function () {
     });
     */
 });
+
+
+describe('/question/:id/answer/:id', function () {
+
+    it('server should respond', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.get(host + '/question/' + question.id + '/answer/' + answer.id, function (error, response) {
+                            expect(response).to.not.be(undefined);
+                            expect(response).to.not.be(null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+});
