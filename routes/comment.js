@@ -1,7 +1,22 @@
 var utils = require('../util.js');
 var _ = require('underscore');
 
+function validateURLParameters(model, req) {
+    if (model === 'answer') {
+        req.assert('rid', 'answer ID must be an integer').isInt();
+        req.assert('qid', 'question ID must be an integer').isInt();
+    } else if (model === 'question') {
+        req.assert('rid', 'question ID must be an integer').isInt();
+    }
+}
+
 exports.list = function (model, req, res) {
+    validateURLParameters(model, req);
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models[model].get(req.params.rid, function (modelError, item) {
         if (!item) {
             res.status(404);
@@ -23,6 +38,14 @@ exports.list = function (model, req, res) {
 };
 
 exports.create = function (model, req, res) {
+    validateURLParameters(model, req);
+    req.checkBody('content', 'content must not be empty').notEmpty();
+    req.checkBody('author_id', 'author_id must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     var newComment = {
         content: req.body.content,
         dateCreated: new Date(),
@@ -55,6 +78,13 @@ exports.create = function (model, req, res) {
 };
 
 exports.get = function (model, req, res) {
+    validateURLParameters(model, req);
+    req.assert('cid', 'comment ID must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.comment.get(req.params.cid, function (err, comment) {
         if (!comment) {
             res.status(404);
@@ -67,12 +97,21 @@ exports.get = function (model, req, res) {
 };
 
 exports.update = function (model, req, res) {
+    validateURLParameters(model, req);
+    req.checkBody('content', 'content must not be empty').notEmpty();
+    req.checkBody('author_id', 'author_id must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.comment.get(req.params.cid, function (err, comment) {
         if (!comment) {
             res.status(404);
             return res.json({error: err});
         }
         comment.content = req.body.content;
+        comment.author_id = req.body.author_id;
         comment.dateModified = new Date();
         comment.save(function (saveError) {
             if (saveError) {
@@ -87,6 +126,13 @@ exports.update = function (model, req, res) {
 };
 
 exports.del = function (model, req, res) {
+    validateURLParameters(model, req);
+    req.assert('cid', 'comment ID must be an integer').isInt();
+    var errors = req.validationErrors();
+    if (errors) {
+        return res.json(errors, 400);
+    }
+
     req.models.comment.find({id: req.params.cid}).remove(function (err) {
         if (err) {
             res.status(500);
