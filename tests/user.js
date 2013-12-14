@@ -33,10 +33,12 @@ describe('/user', function () {
 describe('/user/:id', function() {	
 	
 	it('server should respond', function(done) {
-		request.get(host + '/user/:id', function(error, response) {
-			expect(response).to.not.be(undefined);
-			expect(response).to.not.be(null);
-			done();
+        util.createUser(function (user) {
+            request.get(host + '/user/' + user.id, function(error, response) {
+                expect(response).to.not.be(undefined);
+                expect(response).to.not.be(null);
+                done();
+            });
 		});
 	});
 	
