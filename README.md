@@ -81,15 +81,10 @@ HTTP Status Codes:
    - Check /question/real_id/answer/real_id/comment/nonexistentid
  - Test all models (and sub models) contain an HREF
    - Check where appropriate that they link instead of containing actual representations
- - Implement 'Last-Modified'
  - Test last modified not changed on idempotent methods (HEAD, GET)
  - Test it is changed on POST and PUT
- - Implement 'ETag'
- - Implement 'Expires'
-   - Longer expires for individual resources
-   - Shorter expires for things that depend on other resources
-   - Look up good settings for these
  - Test whether returned objects (for GET) are valid
+ - Fix tests for question creation to include correct parameters
 
  /question
  	- Just question objects, link to comment lists, link to author
