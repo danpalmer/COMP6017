@@ -17,7 +17,8 @@ exports.create = function (req, res) {
         content: req.body.content,
         author_id: req.body.author_id,
         dateCreated: new Date(),
-        dateModified: new Date()
+        dateModified: new Date(),
+        question_id: req.params.qid
     }, function (err, answer) {
         if (!answer) {
             res.status(503); // server is unable to store the representation
