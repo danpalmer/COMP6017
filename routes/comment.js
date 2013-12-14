@@ -13,8 +13,10 @@ exports.list = function (model, req, res) {
                 return res.json({error: commentErr});
             }
             res.status(200);
-            var latest = _.max(comments, function (c) { return c.dateModified; });
-            res.setHeader('Last-Modified', latest.dateModified.toUTCString());
+            if (comments.length) {
+                var latest = _.max(comments, function (c) { return c.dateModified; });
+                res.setHeader('Last-Modified', latest.dateModified.toUTCString());
+            }
             return res.json(utils.renderModels(comments));
         });
     });

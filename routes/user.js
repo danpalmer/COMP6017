@@ -4,8 +4,10 @@ var _ = require('underscore');
 exports.list = function (req, res) {
     req.models.user.find({}, function (err, users) {
         res.status(200);
-        var latest = _.max(users, function (u) { return u.dateModified; });
-        res.setHeader('Last-Modified', latest.dateModified.toUTCString());
+        if (users.length) {
+            var latest = _.max(users, function (u) { return u.dateModified; });
+            res.setHeader('Last-Modified', latest.dateModified.toUTCString());
+        }
         res.json(utils.renderModels(users));
     });
 };
@@ -14,7 +16,8 @@ exports.create = function (req, res) {
     req.models.user.create({
         name: req.body.name,
         email: req.body.email,
-        dateSignedUp: new Date()
+        dateSignedUp: new Date(),
+        dateModified: new Date()
     }, function (err, user) {
         if (!user) {
             res.status(503); // server is unable to store the representation
@@ -46,6 +49,7 @@ exports.update = function (req, res) {
         }
         user.name = req.body.name;
         user.email = req.body.email;
+        user.dateModified = new Date();
         user.save(function (saveError) {
             if (saveError) {
                 res.status(503); // server is unable to store the representation

@@ -1,8 +1,9 @@
 module.exports.define = function (db, models) {
     var User = db.define('user', {
-        name:                 { type: 'text', size: 50 },
-        email:                { type: 'text', size: 128 },
-        dateSignedUp: { type: 'date', time: true }
+        name:         { type: 'text', size: 50 },
+        email:        { type: 'text', size: 128 },
+        dateSignedUp: { type: 'date', time: true },
+        dateModified: { type: 'date', time: true }
     }, {
         methods: {
             render: function () {
@@ -10,6 +11,7 @@ module.exports.define = function (db, models) {
                     name: this.name,
                     email: this.email,
                     dateSignedUp: this.dateSignedUp,
+                    dateModified: this.dateModified,
                     href: '/user/' + this.id,
                     id: this.id
                 };

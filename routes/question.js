@@ -4,8 +4,10 @@ var _ = require('underscore');
 exports.list = function (req, res) {
     req.models.question.find({}, function (err, questions) {
         res.status(200);
-        var latest = _.max(questions, function (q) { return q.dateModified; });
-        res.setHeader('Last-Modified', latest.dateModified.toUTCString());
+        if (questions.length) {
+            var latest = _.max(questions, function (q) { return q.dateModified; });
+            res.setHeader('Last-Modified', latest.dateModified.toUTCString());
+        }
         return res.json(utils.renderModels(questions));
     });
 };
