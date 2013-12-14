@@ -60,6 +60,29 @@ describe('/question/:id/answer', function () {
     it('should link to a valid user', function(done) { 
     });
     */
+    
+    it('server should respond for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.head(host + '/question/' + question.id + '/answer', function (error, response) {
+                    expect(response).to.not.be(undefined);
+                    expect(response).to.not.be(null);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should return 200 for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.head(host + '/question/' + question.id + '/answer', function (error, response) {
+                    expect(response.statusCode).to.be(200);
+                    done();
+                });
+            });
+        });
+    });
 });
 
 describe('/question/:id/answer/:id', function () {
@@ -107,6 +130,37 @@ describe('/question/:id/answer/:id', function () {
                             expect(body.id).to.be(answer.id);
                             expect(body.content).to.be(answer.content);
                             expect(body.author).to.be(answer.author_id);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('server should respond for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.head(host + '/question/' + question.id, function (error, response) {
+                            expect(response).to.not.be(undefined);
+                            expect(response).to.not.be(null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should return 200 for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.head(host + '/question/' + question.id, function (error, response) {
+                            expect(response.statusCode).to.be(200);
                             done();
                         });
                     });

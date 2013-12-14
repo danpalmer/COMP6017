@@ -41,18 +41,6 @@ describe('/question', function () {
         });
     });
 
-    // it('should return a valid question for POST', function (done) {
-    //     // Needs author key added to form
-    //     // This messes up other tests otherwise, as there is no validation and therefore
-    //     // it isn't rejected as being invalid.
-    //     var title = 'title',
-    //         content = 'content';
-    //     request.post({url: host + '/question', json: true, form: {title: title, content: content}}, function (error, response, body) {
-    //         expect(body.title).to.be(title);
-    //         expect(body.content).to.be(content);
-    //         done();
-    //     });
-    // });
     /*
     Need author key in POSTed form before test can be done
     it('should have a user', function (done) {
@@ -63,7 +51,22 @@ describe('/question', function () {
     Need author key in POSTed form before test can be done
     it('should link to a valid user', function (done) { 
     });
-    */
+    */    
+    
+    it('server should respond for HEAD', function (done) {
+        request.head(host + '/question', function (error, response) {
+            expect(response).to.not.be(undefined);
+            expect(response).to.not.be(null);
+            done();
+        });
+    });
+
+    it('should return 200 for HEAD', function (done) {
+        request.head(host + '/question', function (error, response) {
+            expect(response.statusCode).to.be(200);
+            done();
+        });
+    });
 
     // POST with invalid author returns 400 bad request
     // POST with missing values returns 400 bad request

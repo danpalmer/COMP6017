@@ -21,6 +21,21 @@ describe('/', function () {
             done();
         });
     });
+    
+    it('server should respond for HEAD', function (done) {
+        request.head(host + '/', function (error, response) {
+            expect(response).to.not.be(undefined);
+            expect(response).to.not.be(null);
+            done();
+        });
+    });
+
+    it('should return 200 for HEAD', function (done) {
+        request.head(host + '/', function (error, response) {
+            expect(response.statusCode).to.be(200);
+            done();
+        });
+    });
 
     // Do we want to return anything from the home page?
     // Perhaps we could return a list of endpoints and ways to access them?
