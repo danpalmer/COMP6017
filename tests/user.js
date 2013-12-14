@@ -66,30 +66,7 @@ describe('/user/:id', function() {
             });
         });
     });
-	
-	it('server should respond for HEAD', function(done) {
-		var name = 'foo';
-		var email = 'foo@bar.com';
-		request.post({url:host + '/user', json:true, form:{name: name, email: email}}, function(error, response, user) {
-			request.get(host + '/user/' + user.id, function(error, response) {
-				expect(response).to.not.be(undefined);
-				expect(response).to.not.be(null);
-				done();
-			});
-		});
-	});
-	
-	it('should return 200 for HEAD', function(done) {
-		var name = 'foo';
-		var email = 'foo@bar.com';
-		request.post({url:host + '/user', json:true, form:{name: name, email: email}}, function(error, response, user) {
-			request.get(host + '/user/' + user.id, function(error, response) {
-				expect(response.statusCode).to.be(200);
-				done();
-			});
-		});
-	});
-	
+    
 	it('should return 204 for DELETE', function(done) {
 		var name = 'foo';
 		var email = 'foo@bar.com';
