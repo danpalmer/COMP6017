@@ -29,7 +29,7 @@ describe('/question/:id/answer', function () {
             });
         });
     });
-    
+
     it('should return 201 created for POST', function (done) {
         var content = 'content';
         util.createUser(function (user) {
@@ -60,7 +60,7 @@ describe('/question/:id/answer', function () {
     it('should link to a valid user', function(done) { 
     });
     */
-    
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -102,7 +102,7 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should return 200 for GET', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -117,7 +117,7 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should return a valid answer', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -137,7 +137,7 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -169,9 +169,9 @@ describe('/question/:id/answer/:id', function () {
         });
     });
 
-    it('should return 204 for DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
+    it('should return 204 for DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                     //check if created
@@ -187,17 +187,17 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
-    it('should return 404 for GET after DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
+
+    it('should return 404 for GET after DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                     //check if created
                         request.get(host + '/question/' + question.id + '/answer/' + answer.id, function (error, checkResponse) {
                             expect(checkResponse.statusCode).to.be(200);
                             request.del(host + '/question/' + question.id + '/answer/' + answer.id, function (error, deleteResponse) {
-                                expect(deleteResponse.statusCode).to.be(204);                                
+                                expect(deleteResponse.statusCode).to.be(204);
                                 request.get(host + '/question/' + question.id + '/answer/' + answer.id, function (error, response) {
                                     expect(response.statusCode).to.be(404);
                                     done();
@@ -209,32 +209,32 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
-    it('should return 404 for existing QID and nonexistant AID', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
-                request.get(host + '/question/' + question.id + '/answer/99999', function(error, response) {
+
+    it('should return 404 for existing QID and nonexistant AID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.get(host + '/question/' + question.id + '/answer/99999', function (error, response) {
                     expect(response.statusCode).to.be(404);
                     done();
-                });            
+                });
             });
         });
     });
-    
-    it('should return 404 for nonexistant QID and nonexistant AID', function(done) {
-        request.get(host + '/question/99999/answer/99999', function(error, response) {
+
+    it('should return 404 for nonexistant QID and nonexistant AID', function (done) {
+        request.get(host + '/question/99999/answer/99999', function (error, response) {
             expect(response.statusCode).to.be(404);
             done();
         });
     });
-    
+
     it('should have HREF', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         request.get({
-                            url: host + '/question/' + question.id + '/answer/' + answer.id, 
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
                             json: true
                         }, function (error, response, body) {
                             expect(body.href).to.not.be(undefined);
@@ -246,22 +246,18 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should have HREF that can be followed correctly', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         request.get({
-                            url: host + '/question/' + question.id + '/answer/' + answer.id, 
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
                             json: true
                         }, function (error, response, body) {
-                            var hrefUrl = host + body.href;
-                            var hrefContent = body.content;
-                            var hrefDateCreated = body.dateCreated;
-                            var hrefDateMod = body.dateModified;
-                            var hrefHref = body.href;
-                            var hrefID = body.id;
+                            var hrefUrl = host + body.href, hrefContent = body.content, hrefDateCreated = body.dateCreated,
+                                hrefDateMod = body.dateModified, hrefHref = body.href, hrefID = body.id;
                             request.get({
                                 url: hrefUrl,
                                 json: true
@@ -279,7 +275,7 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should return 200 for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -289,7 +285,7 @@ describe('/question/:id/answer/:id', function () {
                         request.put({
                             url: host + '/question/' + question.id + '/answer/' + answer.id,
                             json: true,
-                            form:{
+                            form: {
                                 content: content,
                                 author_id: answer.author.id,
                                 question_id: question.id
@@ -303,18 +299,17 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
-                        var firstContent = answer.content;
-                        var content = "foo";
+                        var firstContent = answer.content, content = "foo";
                         request.put({
                             url: host + '/question/' + question.id + '/answer/' + answer.id,
                             json: true,
-                            form:{
+                            form: {
                                 content: content,
                                 author_id: answer.author.id,
                                 question_id: question.id
@@ -329,7 +324,7 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on existing QID and nonexistent AID', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -337,7 +332,7 @@ describe('/question/:id/answer/:id', function () {
                 request.put({
                     url: host + '/question/' + question.id + '/answer/' + '99999',
                     json: true,
-                    form:{
+                    form: {
                         content: content,
                         author_id: '99999',
                         question_id: question.id
@@ -349,13 +344,13 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on nonexistent QID and nonexistent AID', function (done) {
         var content = "foo";
         request.put({
             url: host + '/question/' + '99999' + '/answer/' + '99999',
             json: true,
-            form:{
+            form: {
                 content: content,
                 author_id: '99999',
                 question_id: '99999'
