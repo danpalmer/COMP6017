@@ -7,6 +7,7 @@ module.exports.define = function (db, models) {
         dateModified: { type: 'date', time: true }
     }, {
         autoFetch: true,
+        autoFetchLimit: 2,
         methods: {
             renderLong: function () {
                 return {
@@ -15,7 +16,8 @@ module.exports.define = function (db, models) {
                     dateModified: this.dateModified,
                     id: this.id,
                     _links: {
-                        self: { href: this.href() }
+                        self: { href: this.href() },
+                        parent: { href: this.parent().href() }
                     },
                     _embedded: {
                         author: this.author.renderLong()
@@ -37,6 +39,13 @@ module.exports.define = function (db, models) {
                                 '/comment/' + this.id;
                 }
                 return url;
+            },
+            parent: function() {
+                if (this.answer_id) {
+                    return this.answer;
+                } else {
+                    return this.question;
+                }
             }
         }
     });
