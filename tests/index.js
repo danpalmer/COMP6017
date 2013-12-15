@@ -21,7 +21,7 @@ describe('/', function () {
             done();
         });
     });
-    
+
     it('server should respond for HEAD', function (done) {
         request.head(host + '/', function (error, response) {
             expect(response).to.not.be(undefined);
