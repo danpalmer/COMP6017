@@ -21,7 +21,7 @@ describe('/question', function () {
             done();
         });
     });
-    
+
     it('should return 201 created for POST', function (done) {
         var title = 'title',
             content = 'content';
@@ -40,7 +40,7 @@ describe('/question', function () {
             });
         });
     });
-    
+
     it('server should respond for HEAD', function (done) {
         request.head(host + '/question', function (error, response) {
             expect(response).to.not.be(undefined);
@@ -84,7 +84,7 @@ describe('/question/:id', function () {
             });
         });
     });
-    
+
     it('should return a valid question', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -101,7 +101,7 @@ describe('/question/:id', function () {
             });
         });
     });
-    
+
     /*
     Need author key in POSTed form before test can be done
     it('should have a user', function (done) {
@@ -136,14 +136,14 @@ describe('/question/:id', function () {
             });
         });
     });
-  
-    it('should return 204 for DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
+
+    it('should return 204 for DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
             //check if created
                 request.get(host + '/question/' + question.id, function (error, checkResponse) {
                     expect(checkResponse.statusCode).to.be(200);
-                    request.del(host + '/question/' + question.id, function(deleteError, deleteResponse) {
+                    request.del(host + '/question/' + question.id, function (deleteError, deleteResponse) {
                         expect(deleteResponse.statusCode).to.be(204);
                         done();
                     });
@@ -151,13 +151,13 @@ describe('/question/:id', function () {
             });
         });
     });
-  
-    it('should return 404 for GET after DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
-                request.del(host + '/question/' + question.id, function(deleteError, deleteResponse) {
+
+    it('should return 404 for GET after DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.del(host + '/question/' + question.id, function (deleteError, deleteResponse) {
                     expect(deleteResponse.statusCode).to.be(204);
-                    request.get(host + '/question/' + question.id, function(checkError, checkResponse) {
+                    request.get(host + '/question/' + question.id, function (checkError, checkResponse) {
                         expect(checkResponse.statusCode).to.be(404);
                         done();
                     });
@@ -165,19 +165,19 @@ describe('/question/:id', function () {
             });
         });
     });
-  
-    it('should return 404 for nonexistent QID', function(done) {
-        request.get(host + '/question/99999', function(error, response) {
+
+    it('should return 404 for nonexistent QID', function (done) {
+        request.get(host + '/question/99999', function (error, response) {
             expect(response.statusCode).to.be(404);
             done();
         });
     });
-    
+
     it('should have HREF', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 request.get({
-                    url: host + '/question/' + question.id, 
+                    url: host + '/question/' + question.id,
                     json: true
                 }, function (error, response, body) {
                     expect(body.href).to.not.be(undefined);
@@ -187,21 +187,16 @@ describe('/question/:id', function () {
             });
         });
     });
-    
+
     it('should have HREF that can be followed correctly', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 request.get({
-                    url: host + '/question/' + question.id, 
+                    url: host + '/question/' + question.id,
                     json: true
                 }, function (error, response, body) {
-                    var hrefUrl = host + body.href;
-                    var hrefTitle = body.title;
-                    var hrefContent = body.content;
-                    var hrefDateCreated = body.dateCreated;
-                    var hrefDateMod = body.dateModified;
-                    var hrefHref = body.href;
-                    var hrefID = body.id;
+                    var hrefUrl = host + body.href, hrefTitle = body.title, hrefContent = body.content, hrefDateCreated = body.dateCreated,
+                        hrefDateMod = body.dateModified, hrefHref = body.href, hrefID = body.id;
                     request.get({
                         url: hrefUrl,
                         json: true
@@ -222,17 +217,16 @@ describe('/question/:id', function () {
     it('should return 200 for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
-                var title = 'foo';
-                var content = 'bar';
+                var title = 'foo', content = 'bar';
                 request.put({
-                    url:host + '/question/' + question.id, 
-                    json:true, 
-                    form:{
-                        title: title, 
+                    url: host + '/question/' + question.id,
+                    json: true,
+                    form: {
+                        title: title,
                         content: content,
-                        author_id: question.author.id,
+                        author_id: question.author.id
                     }
-                }, function(error, response, body) {
+                }, function (error, response, body) {
                     expect(response.statusCode).to.be(200);
                     done();
                 });
@@ -243,19 +237,16 @@ describe('/question/:id', function () {
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
-                var firstTitle = question.title;
-                var firstContent = question.content;
-                var title = 'foo';
-                var content = 'bar';
+                var firstTitle = question.title, firstContent = question.content, title = 'foo', content = 'bar';
                 request.put({
-                    url:host + '/question/' + question.id, 
-                    json:true, 
-                    form:{
-                        title: title, 
+                    url: host + '/question/' + question.id,
+                    json: true,
+                    form: {
+                        title: title,
                         content: content,
-                        author_id: question.author.id,
+                        author_id: question.author.id
                     }
-                }, function(error, response, body) {
+                }, function (error, response, body) {
                     expect(body.title).to.not.be(firstTitle);
                     expect(body.content).to.not.be(firstContent);
                     expect(body.title).to.be(title);
@@ -269,17 +260,16 @@ describe('/question/:id', function () {
     it('should return 404 for PUT on nonexistant QID', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
-                var title = 'foo';
-                var content = 'bar';
+                var title = 'foo', content = 'bar';
                 request.put({
-                    url:host + '/question/' + '99999', 
-                    json:true, 
-                    form:{
-                        title: title, 
+                    url: host + '/question/' + '99999',
+                    json: true,
+                    form: {
+                        title: title,
                         content: content,
-                        author_id: question.author.id,
+                        author_id: question.author.id
                     }
-                }, function(error, response, body) {
+                }, function (error, response, body) {
                     expect(response.statusCode).to.be(404);
                     done();
                 });
