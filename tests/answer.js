@@ -143,7 +143,7 @@ describe('/question/:id/answer/:id', function () {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
-                        request.head(host + '/question/' + question.id, function (error, response) {
+                        request.head(host + '/question/' + question.id + '/answer/' + answer.id, function (error, response) {
                             expect(response).to.not.be(undefined);
                             expect(response).to.not.be(null);
                             done();
@@ -159,9 +159,28 @@ describe('/question/:id/answer/:id', function () {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
-                        request.head(host + '/question/' + question.id, function (error, response) {
+                        request.head(host + '/question/' + question.id + '/answer/' + answer.id, function (error, response) {
                             expect(response.statusCode).to.be(200);
                             done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should respond 204 for DELETE', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                    //check if created
+                        request.get(host + '/question/' + question.id + '/answer/' + answer.id, function (error, checkResponse) {
+                            expect(checkResponse.statusCode).to.be(200);
+                            request.del(host + '/question/' + question.id + '/answer/' + answer.id, function (error, deleteResponse) {
+                                expect(deleteResponse.statusCode).to.be(204);
+                                done();
+                            });
                         });
                     });
                 });
