@@ -198,27 +198,27 @@ describe('/question/:id/comment/:id', function () {
         });
     });
 
-  it('should respond 404 on GET after DELETE', function(done) {
-    util.createUser(function(user) {
-      util.createQuestion(user.id, function(question) {
-	    util.createUser(function(commenter) {
-	      util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
-            //check if created
-            request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, checkResponse) {
-              expect(checkResponse.statusCode).to.be(200);
-              request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, deleteResponse) {
-                expect(deleteResponse.statusCode).to.be(204);
-                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, errorResponse) {
-                  expect(errorResponse.statusCode).to.be(404);
-                  done();
+    it('should respond 404 for GET after DELETE', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                util.createUser(function(commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+                    //check if created
+                        request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, checkResponse) {
+                            expect(checkResponse.statusCode).to.be(200);
+                            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, deleteResponse) {
+                                expect(deleteResponse.statusCode).to.be(204);
+                                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, errorResponse) {
+                                    expect(errorResponse.statusCode).to.be(404);
+                                    done();
+                                });
+                            });
+                        });
+                    });
                 });
-              });
             });
-		  });
-		});
-      });
+        });
     });
-  });
   
   it('should return 404 for nonexistent QID + CID', function(done) {
     request.get(host + '/question/99999/comment/99999', function(error, response) {
@@ -435,7 +435,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
         });
     });
 
-    it('should respond 204 on DELETE', function(done) {
+    it('should return 204 for DELETE', function(done) {
         util.createUser(function(user) {
             util.createQuestion(user.id, function(question) {
                 util.createUser(function (answerer) {
@@ -448,6 +448,32 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                     request.del(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, deleteResponse) {
                                         expect(deleteResponse.statusCode).to.be(204);
                                         done();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for GET after DELETE', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                                request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, checkResponse) {
+                                    //check if created
+                                    expect(checkResponse.statusCode).to.be(200);
+                                    request.del(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, deleteResponse) {
+                                        expect(deleteResponse.statusCode).to.be(204);                                        
+                                        request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
+                                            expect(response.statusCode).to.be(404);
+                                            done();
+                                        });
                                     });
                                 });
                             });
