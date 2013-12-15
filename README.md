@@ -70,14 +70,7 @@ HTTP Status Codes:
  - Test DELETEs on all models
    - "server actually deletes representation"
    - "server returns 204 when deleting"
- - Test 404s on all models
-   - Check known non-existent model (i.e. id: 99999)
-   - Check /question/nonexistent
-   - Check /question/nonexistent/comment/nonexistentid
-   - Check /question/real_id/comment/nonexistentid
-   - Check /question/nonexistent/answer/nonexistent/comment/nonexistentid
-   - Check /question/real_id/answer/nonexistent/comment/nonexistentid
-   - Check /question/real_id/answer/real_id/comment/nonexistentid
+   - "delete returns 404 on nonexistent model"
  - Test all models (and sub models) contain an HREF
    - Check where appropriate that they link instead of containing actual representations
  - Test last modified not changed on idempotent methods (HEAD, GET)
