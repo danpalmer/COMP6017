@@ -145,8 +145,8 @@ describe('/user/:id', function () {
                 url: host + '/user/' + user.id,
                 json: true
             }, function (error, response, body) {
-                expect(body.href).to.not.be(undefined);
-                expect(body.href).to.not.be(null);
+                expect(body._links.self.href).to.not.be(undefined);
+                expect(body._links.self.href).to.not.be(null);
                 done();
             });
         });
@@ -158,8 +158,8 @@ describe('/user/:id', function () {
                 url: host + '/user/' + user.id,
                 json: true
             }, function (error, response, body) {
-                var hrefUrl = host + body.href, hrefName = body.name, hrefEmail = body.email, hrefDateSU = body.dateSignedUp,
-                    hrefDateMod = body.dateModified, hrefHref = body.href, hrefID = body.id;
+                var hrefUrl = host + body._links.self.href, hrefName = body.name, hrefEmail = body.email, hrefDateSU = body.dateSignedUp,
+                    hrefDateMod = body.dateModified, hrefHref = body._links.self.href, hrefID = body.id;
                 request.get({
                     url: hrefUrl,
                     json: true
@@ -168,7 +168,7 @@ describe('/user/:id', function () {
                     expect(hrefBody.email).to.be(hrefEmail);
                     expect(hrefBody.dateSignedUp).to.be(hrefDateSU);
                     expect(hrefBody.dateModified).to.be(hrefDateMod);
-                    expect(hrefBody.href).to.be(hrefHref);
+                    expect(hrefBody._links.self.href).to.be(hrefHref);
                     expect(hrefBody.id).to.be(hrefID);
                     done();
                 });
