@@ -47,25 +47,25 @@ describe('/user', function () {
 
 describe('/user/:id', function () {
 
-	it('server should respond', function (done) {
+    it('server should respond', function (done) {
         util.createUser(function (user) {
             request.get(host + '/user/' + user.id, function (error, response) {
                 expect(response).to.not.be(undefined);
                 expect(response).to.not.be(null);
                 done();
             });
-		});
-	});
+        });
+    });
 
-	it('should return 200 for GET', function (done) {
-		var name = 'foo', email = 'foo@bar.com';
-		request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, response, user) {
-			request.get(host + '/user/' + user.id, function (error, response) {
-				expect(response.statusCode).to.be(200);
-				done();
-			});
-		});
-	});
+    it('should return 200 for GET', function (done) {
+        var name = 'foo', email = 'foo@bar.com';
+        request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, response, user) {
+            request.get(host + '/user/' + user.id, function (error, response) {
+                expect(response.statusCode).to.be(200);
+                done();
+            });
+        });
+    });
 
     it('should return a valid user', function (done) {
         util.createUser(function (user) {
@@ -81,56 +81,56 @@ describe('/user/:id', function () {
         });
     });
 
-	it('server should respond for HEAD', function (done) {
+    it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             request.head(host + '/user/' + user.id, function (error, response) {
                 expect(response).to.not.be(undefined);
                 expect(response).to.not.be(null);
                 done();
             });
-		});
-	});
+        });
+    });
 
-	it('should return 200 for HEAD', function (done) {
-		var name = 'foo', email = 'foo@bar.com';
-		request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, response, user) {
-			request.head(host + '/user/' + user.id, function (error, response) {
-				expect(response.statusCode).to.be(200);
-				done();
-			});
-		});
-	});
+    it('should return 200 for HEAD', function (done) {
+        var name = 'foo', email = 'foo@bar.com';
+        request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, response, user) {
+            request.head(host + '/user/' + user.id, function (error, response) {
+                expect(response.statusCode).to.be(200);
+                done();
+            });
+        });
+    });
 
-	it('should return 204 for DELETE', function (done) {
-		var name = 'foo', email = 'foo@bar.com';
-		request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, createResponse, user) {
-			expect(createResponse.statusCode).to.be(201); // created
-			request.get(host + '/user/' + user.id, function (error, getResponse) {
-				expect(getResponse.statusCode).to.be(200); // should return the temporary user
-				request.del(host + '/user/' + user.id, function (error, deleteResponse) {
-					expect(deleteResponse.statusCode).to.be(204); // 204 deleted
-					done();
-				});
-			});
-		});
-	});
+    it('should return 204 for DELETE', function (done) {
+        var name = 'foo', email = 'foo@bar.com';
+        request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, createResponse, user) {
+            expect(createResponse.statusCode).to.be(201); // created
+            request.get(host + '/user/' + user.id, function (error, getResponse) {
+                expect(getResponse.statusCode).to.be(200); // should return the temporary user
+                request.del(host + '/user/' + user.id, function (error, deleteResponse) {
+                    expect(deleteResponse.statusCode).to.be(204); // 204 deleted
+                    done();
+                });
+            });
+        });
+    });
 
-	it('should return 404 for GET after DELETE', function (done) {
-		var name = 'foo', email = 'foo@bar.com';
-		request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, createResponse, user) {
-			expect(createResponse.statusCode).to.be(201); // created
-			request.get(host + '/user/' + user.id, function (error, getResponse) {
-				expect(getResponse.statusCode).to.be(200); // should return the temporary user
-				request.del(host + '/user/' + user.id, function (error, deleteResponse) {
-					expect(deleteResponse.statusCode).to.be(204); // 204 deleted
-					request.get(host + '/user/' + user.id, function (error, checkResponse) {
-						expect(checkResponse.statusCode).to.be(404); // user should now be deleted
-						done();
-					});
-				});
-			});
-		});
-	});
+    it('should return 404 for GET after DELETE', function (done) {
+        var name = 'foo', email = 'foo@bar.com';
+        request.post({url: host + '/user', json: true, form: {name: name, email: email}}, function (error, createResponse, user) {
+            expect(createResponse.statusCode).to.be(201); // created
+            request.get(host + '/user/' + user.id, function (error, getResponse) {
+                expect(getResponse.statusCode).to.be(200); // should return the temporary user
+                request.del(host + '/user/' + user.id, function (error, deleteResponse) {
+                    expect(deleteResponse.statusCode).to.be(204); // 204 deleted
+                    request.get(host + '/user/' + user.id, function (error, checkResponse) {
+                        expect(checkResponse.statusCode).to.be(404); // user should now be deleted
+                        done();
+                    });
+                });
+            });
+        });
+    });
 
     it('should return 404 for nonexistant UID', function (done) {
         request.get(host + '/user/99999', function (error, response) {
@@ -150,7 +150,7 @@ describe('/user/:id', function () {
                 done();
             });
         });
-	});
+    });
 
     it('should have HREF that can be followed correctly', function (done) {
         util.createUser(function (user) {
@@ -174,7 +174,7 @@ describe('/user/:id', function () {
                 });
             });
         });
-	});
+    });
 
     it('should return 200 for PUT', function (done) {
         util.createUser(function (user) {
