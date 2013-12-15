@@ -154,7 +154,38 @@ describe('/user/:id', function() {
                 done();
             });
         });
+	});    
+    
+    it('should have HREF that can be followed correctly', function(done) {
+        util.createUser(function (user) {
+            request.get({
+                url: host + '/user/' + user.id,
+                json: true
+            }, function (error, response, body) {
+                var hrefUrl = host + body.href;
+                var hrefName = body.name;
+                var hrefEmail = body.email;
+                var hrefDateSU = body.dateSignedUp;
+                var hrefDateMod = body.dateModified;
+                var hrefHref = body.href;
+                var hrefID = body.id;
+                request.get({
+                    url: hrefUrl,
+                    json: true
+                }, function (error, response, hrefBody) {
+                    expect(hrefBody.name).to.be(hrefName);
+                    expect(hrefBody.email).to.be(hrefEmail);
+                    expect(hrefBody.dateSignedUp).to.be(hrefDateSU);
+                    expect(hrefBody.dateModified).to.be(hrefDateMod);
+                    expect(hrefBody.href).to.be(hrefHref);
+                    expect(hrefBody.id).to.be(hrefID);
+                    done();
+                });
+            });
+        });
 	});
+    
+    
 
     // PUT should update an existing user
     // PUT should return 404 for unknown user

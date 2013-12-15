@@ -246,4 +246,37 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
+    
+    it('should have HREF that can be followed correctly', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.get({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id, 
+                            json: true
+                        }, function (error, response, body) {
+                            var hrefUrl = host + body.href;
+                            var hrefContent = body.content;
+                            var hrefDateCreated = body.dateCreated;
+                            var hrefDateMod = body.dateModified;
+                            var hrefHref = body.href;
+                            var hrefID = body.id;
+                            request.get({
+                                url: hrefUrl,
+                                json: true
+                            }, function (error, response, hrefBody) {
+                                expect(hrefBody.content).to.be(hrefContent);
+                                expect(hrefBody.dateCreated).to.be(hrefDateCreated);
+                                expect(hrefBody.dateModified).to.be(hrefDateMod);
+                                expect(hrefBody.href).to.be(hrefHref);
+                                expect(hrefBody.id).to.be(hrefID);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

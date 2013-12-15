@@ -256,6 +256,39 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
+
+    it('should have HREF that can be followed correctly', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        request.get({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id, 
+                            json: true
+                        }, function (error, response, body) {
+                            var hrefUrl = host + body.href;
+                            var hrefContent = body.content;
+                            var hrefDateCreated = body.dateCreated;
+                            var hrefDateMod = body.dateModified;
+                            var hrefHref = body.href;
+                            var hrefID = body.id;
+                            request.get({
+                                url: hrefUrl,
+                                json: true
+                            }, function (error, response, hrefBody) {
+                                expect(hrefBody.content).to.be(hrefContent);
+                                expect(hrefBody.dateCreated).to.be(hrefDateCreated);
+                                expect(hrefBody.dateModified).to.be(hrefDateMod);
+                                expect(hrefBody.href).to.be(hrefHref);
+                                expect(hrefBody.id).to.be(hrefID);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 describe('/question/:id/answer/:id/comment', function () {
@@ -547,6 +580,43 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                     expect(body.href).to.not.be(undefined);
                                     expect(body.href).to.not.be(null);
                                     done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should have HREF that can be followed correctly', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                request.get({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, 
+                                    json: true
+                                }, function (error, response, body) {
+                                    var hrefUrl = host + body.href;
+                                    var hrefContent = body.content;
+                                    var hrefDateCreated = body.dateCreated;
+                                    var hrefDateMod = body.dateModified;
+                                    var hrefHref = body.href;
+                                    var hrefID = body.id;
+                                    request.get({
+                                        url: hrefUrl,
+                                        json: true
+                                    }, function (error, response, hrefBody) {
+                                        expect(hrefBody.content).to.be(hrefContent);
+                                        expect(hrefBody.dateCreated).to.be(hrefDateCreated);
+                                        expect(hrefBody.dateModified).to.be(hrefDateMod);
+                                        expect(hrefBody.href).to.be(hrefHref);
+                                        expect(hrefBody.id).to.be(hrefID);
+                                        done();
+                                    });
                                 });
                             });
                         });
