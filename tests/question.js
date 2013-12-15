@@ -276,4 +276,19 @@ describe('/question/:id', function () {
             });
         });
     });
+
+    it('should not modify dateModified for GET', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var dateModified = question.dateModified;
+                request.get({
+                    url: host + '/question/' + question.id,
+                    json: true
+                }, function (error, response, body) {
+                    expect(body.dateModified).to.be(dateModified);
+                    done();
+                });
+            });
+        });
+    });
 });

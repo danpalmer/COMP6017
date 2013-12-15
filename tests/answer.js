@@ -360,4 +360,23 @@ describe('/question/:id/answer/:id', function () {
             done();
         });
     });
+
+    it('should not modify dateModified for GET', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        var dateModified = answer.dateModified;
+                        request.get({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
+                            json: true
+                        }, function (error, response, body) {
+                            expect(body.dateModified).to.be(dateModified);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
