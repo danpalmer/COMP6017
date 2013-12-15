@@ -135,6 +135,13 @@ describe('/user/:id', function() {
 			});
 		});
 	});
+    
+    it('should return 404 for nonexistant UID', function(done) {
+        request.get(host + '/user/99999', function(error, response) {
+            expect(response.statusCode).to.be(404);
+            done();
+        });
+    });  
 
     // PUT should update an existing user
     // PUT should return 404 for unknown user

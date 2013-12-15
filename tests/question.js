@@ -107,7 +107,7 @@ describe('/question/:id', function () {
                     expect(body.id).to.be(question.id);
                     expect(body.title).to.be(question.title);
                     expect(body.content).to.be(question.content);
-                    expect(body.author).to.be(question.author_id);
+                    expect(body.author.id).to.be(question.author.id);
                     done();
                 });
             });
@@ -178,10 +178,10 @@ describe('/question/:id', function () {
     });
   });
   
-  it('should return 404 for nonexistent QID', function(done) {
-    request.get(host + '/question/99999', function(error, response) {
-      expect(response.statusCode).to.be(404);
-      done();
+    it('should return 404 for nonexistent QID', function(done) {
+        request.get(host + '/question/99999', function(error, response) {
+            expect(response.statusCode).to.be(404);
+            done();
+        });
     });
-  });
 });

@@ -129,7 +129,7 @@ describe('/question/:id/answer/:id', function () {
                         }, function (error, response, body) {
                             expect(body.id).to.be(answer.id);
                             expect(body.content).to.be(answer.content);
-                            expect(body.author).to.be(answer.author_id);
+                            expect(body.author.id).to.be(answer.author.id);
                             done();
                         });
                     });
@@ -209,4 +209,22 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
+    
+    it('should return 404 for existing QID and nonexistant AID', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                request.get(host + '/question/' + question.id + '/answer/99999', function(error, response) {
+                    expect(response.statusCode).to.be(404);
+                    done();
+                });            
+            });
+        });
+    });
+    
+    it('should return 404 for nonexistant QID and nonexistant AID', function(done) {
+        request.get(host + '/question/99999/answer/99999', function(error, response) {
+            expect(response.statusCode).to.be(404);
+            done();
+        });
+    });    
 });

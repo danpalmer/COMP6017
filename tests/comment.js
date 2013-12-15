@@ -127,7 +127,7 @@ describe('/question/:id/comment/:id', function () {
                         }, function (error, response, body) {
                             expect(body.id).to.be(comment.id);
                             expect(body.content).to.be(comment.content);
-                            expect(body.author).to.be(commenter.id);
+                            expect(body.author.id).to.be(comment.author.id);
                             done();
                         });
                     });
@@ -179,7 +179,7 @@ describe('/question/:id/comment/:id', function () {
         });
     });
   
-    it('should respond 204 for DELETE', function(done) {
+    it('should return 204 for DELETE', function(done) {
         util.createUser(function(user) {
             util.createQuestion(user.id, function(question) {
                 util.createUser(function(commenter) {
@@ -198,7 +198,7 @@ describe('/question/:id/comment/:id', function () {
         });
     });
 
-    it('should respond 404 for GET after DELETE', function(done) {
+    it('should return 404 for GET after DELETE', function(done) {
         util.createUser(function(user) {
             util.createQuestion(user.id, function(question) {
                 util.createUser(function(commenter) {
@@ -220,26 +220,23 @@ describe('/question/:id/comment/:id', function () {
         });
     });
   
-  it('should return 404 for nonexistent QID + CID', function(done) {
-    request.get(host + '/question/99999/comment/99999', function(error, response) {
-      expect(response.statusCode).to.be(404);
-      done();
-    });
-  });
-  
-   it('should return 404 for existing QID with nonexistant CID', function(done) {
-    util.createUser(function(user) {
-      util.createQuestion(user.id, function(question) {
-        request.get(host + '/question/' + question.id + '/comment/99999', function(error, response) {
-          expect(response.statusCode).to.be(404);
-          done();
+    it('should return 404 for nonexistent QID and nonexistant CID', function(done) {
+        request.get(host + '/question/99999/comment/99999', function(error, response) {
+            expect(response.statusCode).to.be(404);
+            done();
         });
-      });
     });
-  });
-// TODO: Tests for /question/:id/answer/:id/comment
-// TODO: Tests for /question/:id/answer/:id/comment/:id
-
+  
+    it('should return 404 for existing QID and nonexistant CID', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                request.get(host + '/question/' + question.id + '/comment/99999', function(error, response) {
+                    expect(response.statusCode).to.be(404);
+                    done();
+                });
+            });
+        });
+    });
 });
 
 describe('/question/:id/answer/:id/comment', function () {
@@ -359,7 +356,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
-                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
                                     expect(response.statusCode).to.be(200);
                                     done();
@@ -385,7 +382,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                 }, function (error, response, body) {
                                     expect(body.id).to.be(comment.id);
                                     expect(body.content).to.be(comment.content);
-                                    expect(body.author).to.be(commenter.id);
+                                    expect(body.author.id).to.be(comment.author.id);
                                     done();
                                 });
                             });
@@ -402,7 +399,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
-                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.head(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
                                     expect(response).to.not.be(undefined);
                                     expect(response).to.not.be(null);
@@ -422,7 +419,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
-                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.head(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
                                     expect(response.statusCode).to.be(200);
                                     done();
@@ -441,7 +438,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
-                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
                                     //check if created
                                     expect(response.statusCode).to.be(200);
@@ -464,7 +461,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
-                            util.createComment(commenter.id, util.type.ANSWER, null, answer.id, function (comment) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, checkResponse) {
                                     //check if created
                                     expect(checkResponse.statusCode).to.be(200);
@@ -477,6 +474,39 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                     });
                                 });
                             });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for nonexistent QID, nonexistent AID and nonexistent CID', function(done) {
+        request.get(host + '/question/99999/answer/99999/comment/99999', function(error, response) {
+            expect(response.statusCode).to.be(404);
+            done();
+        });
+    });
+    
+    it('should return 404 for existing QID, nonexistent AID and nonexistent CID', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {            
+                request.get(host + '/question/' + question.id + '/answer/99999/comment/99999', function(error, response) {
+                    expect(response.statusCode).to.be(404);
+                    done();
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for existing QID, existing AID and nonexistent CID', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/99999', function(error, response) {
+                            expect(response.statusCode).to.be(404);
+                            done();
                         });
                     });
                 });
