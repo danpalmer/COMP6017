@@ -95,7 +95,7 @@ describe('/question/:id', function () {
                     expect(body.id).to.be(question.id);
                     expect(body.title).to.be(question.title);
                     expect(body.content).to.be(question.content);
-                    expect(body.author.id).to.be(question.author.id);
+                    expect(body._embedded.author.id).to.be(question._embedded.author.id);
                     done();
                 });
             });
@@ -180,8 +180,8 @@ describe('/question/:id', function () {
                     url: host + '/question/' + question.id,
                     json: true
                 }, function (error, response, body) {
-                    expect(body.href).to.not.be(undefined);
-                    expect(body.href).to.not.be(null);
+                    expect(body._links.self.href).to.not.be(undefined);
+                    expect(body._links.self.href).to.not.be(null);
                     done();
                 });
             });
@@ -195,8 +195,8 @@ describe('/question/:id', function () {
                     url: host + '/question/' + question.id,
                     json: true
                 }, function (error, response, body) {
-                    var hrefUrl = host + body.href, hrefTitle = body.title, hrefContent = body.content, hrefDateCreated = body.dateCreated,
-                        hrefDateMod = body.dateModified, hrefHref = body.href, hrefID = body.id;
+                    var hrefUrl = host + body._links.self.href, hrefTitle = body.title, hrefContent = body.content, hrefDateCreated = body.dateCreated,
+                        hrefDateMod = body.dateModified, hrefHref = body._links.self.href, hrefID = body.id;
                     request.get({
                         url: hrefUrl,
                         json: true
@@ -205,7 +205,7 @@ describe('/question/:id', function () {
                         expect(hrefBody.content).to.be(hrefContent);
                         expect(hrefBody.dateCreated).to.be(hrefDateCreated);
                         expect(hrefBody.dateModified).to.be(hrefDateMod);
-                        expect(hrefBody.href).to.be(hrefHref);
+                        expect(hrefBody._links.self.href).to.be(hrefHref);
                         expect(hrefBody.id).to.be(hrefID);
                         done();
                     });
@@ -224,7 +224,7 @@ describe('/question/:id', function () {
                     form: {
                         title: title,
                         content: content,
-                        author_id: question.author.id
+                        author_id: question._embedded.author.id
                     }
                 }, function (error, response, body) {
                     expect(response.statusCode).to.be(200);
@@ -244,7 +244,7 @@ describe('/question/:id', function () {
                     form: {
                         title: title,
                         content: content,
-                        author_id: question.author.id
+                        author_id: question._embedded.author.id
                     }
                 }, function (error, response, body) {
                     expect(body.title).to.not.be(firstTitle);
@@ -267,7 +267,7 @@ describe('/question/:id', function () {
                     form: {
                         title: title,
                         content: content,
-                        author_id: question.author.id
+                        author_id: question._embedded.author.id
                     }
                 }, function (error, response, body) {
                     expect(response.statusCode).to.be(404);
