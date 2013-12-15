@@ -40,12 +40,11 @@ module.exports.define = function (db, models) {
                 }
                 return url;
             },
-            parent: function() {
+            parent: function () {
                 if (this.answer_id) {
                     return this.answer;
-                } else {
-                    return this.question;
                 }
+                return this.question;
             }
         }
     });
