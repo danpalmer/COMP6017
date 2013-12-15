@@ -13,8 +13,10 @@ module.exports.define = function (db, models) {
                     email: this.email,
                     dateSignedUp: this.dateSignedUp,
                     dateModified: this.dateModified,
-                    href: this.href(),
-                    id: this.id
+                    id: this.id,
+                    _links: {
+                        self: { href: this.href() }
+                    }
                 };
             },
             renderShort: function () {

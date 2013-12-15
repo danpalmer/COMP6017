@@ -13,9 +13,13 @@ module.exports.define = function (db, models) {
                     content: this.content,
                     dateCreated: this.dateCreated,
                     dateModified: this.dateModified,
-                    href: this.href(),
                     id: this.id,
-                    author: this.author.renderLong()
+                    _links: {
+                        self: { href: this.href() }
+                    },
+                    _embedded: {
+                        author: this.author.renderLong()
+                    }
                 };
             },
             renderShort: function () {

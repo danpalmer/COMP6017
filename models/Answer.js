@@ -12,24 +12,32 @@ module.exports.define = function (db, models) {
         methods: {
             renderLong: function () {
                 return {
-                    author: this.author.renderLong(),
                     content: this.content,
                     dateCreated: this.dateCreated,
                     dateModified: this.dateModified,
-                    href: this.href(),
                     id: this.id,
-                    comments: utils.renderModels(this.comments)
+                    _links: {
+                        self: { href: this.href() }
+                    },
+                    _embedded: {
+                        author: this.author.renderLong(),
+                        comments: utils.renderModels(this.comments)
+                    }
                 };
             },
             renderShort: function () {
                 return {
-                    author: this.author.renderLong(),
                     content: this.content,
                     dateCreated: this.dateCreated,
                     dateModified: this.dateModified,
-                    href: this.href(),
                     id: this.id,
-                    comments: this.href() + '/comment'
+                    _links: {
+                        self: { href: this.href() },
+                        comments: { href: this.href() + '/comment' }
+                    },
+                    _embedded: {
+                        author: this.author.renderLong()
+                    }
                 };
             },
             href: function () {
