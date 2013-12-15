@@ -58,7 +58,7 @@ describe('/question/:id/comment', function () {
     it('should link to a valid user', function (done) { 
     });
     */
-    
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -147,7 +147,7 @@ describe('/question/:id/comment/:id', function () {
     it('should link to a valid user', function (done) { 
     });
     */
-    
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -178,16 +178,16 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
-  
-    it('should return 204 for DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
-                util.createUser(function(commenter) {
-                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+
+    it('should return 204 for DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
                     //check if created
-                        request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, checkResponse) {
+                        request.get(host + '/question/' + question.id + '/comment/' + comment.id, function (error, checkResponse) {
                             expect(checkResponse.statusCode).to.be(200);
-                            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, deleteResponse) {
+                            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function (error, deleteResponse) {
                                 expect(deleteResponse.statusCode).to.be(204);
                                 done();
                             });
@@ -198,17 +198,17 @@ describe('/question/:id/comment/:id', function () {
         });
     });
 
-    it('should return 404 for GET after DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
-                util.createUser(function(commenter) {
-                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function(comment) {
+    it('should return 404 for GET after DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
                     //check if created
-                        request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, checkResponse) {
+                        request.get(host + '/question/' + question.id + '/comment/' + comment.id, function (error, checkResponse) {
                             expect(checkResponse.statusCode).to.be(200);
-                            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function(error, deleteResponse) {
+                            request.del(host + '/question/' + question.id + '/comment/' + comment.id, function (error, deleteResponse) {
                                 expect(deleteResponse.statusCode).to.be(204);
-                                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function(error, errorResponse) {
+                                request.get(host + '/question/' + question.id + '/comment/' + comment.id, function (error, errorResponse) {
                                     expect(errorResponse.statusCode).to.be(404);
                                     done();
                                 });
@@ -219,18 +219,18 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
-  
-    it('should return 404 for nonexistent QID and nonexistant CID', function(done) {
-        request.get(host + '/question/99999/comment/99999', function(error, response) {
+
+    it('should return 404 for nonexistent QID and nonexistant CID', function (done) {
+        request.get(host + '/question/99999/comment/99999', function (error, response) {
             expect(response.statusCode).to.be(404);
             done();
         });
     });
-  
-    it('should return 404 for existing QID and nonexistant CID', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
-                request.get(host + '/question/' + question.id + '/comment/99999', function(error, response) {
+
+    it('should return 404 for existing QID and nonexistant CID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.get(host + '/question/' + question.id + '/comment/99999', function (error, response) {
                     expect(response.statusCode).to.be(404);
                     done();
                 });
@@ -244,7 +244,7 @@ describe('/question/:id/comment/:id', function () {
                 util.createUser(function (commenter) {
                     util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
                         request.get({
-                            url: host + '/question/' + question.id + '/comment/' + comment.id, 
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
                             json: true
                         }, function (error, response, body) {
                             expect(body.href).to.not.be(undefined);
@@ -263,15 +263,11 @@ describe('/question/:id/comment/:id', function () {
                 util.createUser(function (commenter) {
                     util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
                         request.get({
-                            url: host + '/question/' + question.id + '/comment/' + comment.id, 
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
                             json: true
                         }, function (error, response, body) {
-                            var hrefUrl = host + body.href;
-                            var hrefContent = body.content;
-                            var hrefDateCreated = body.dateCreated;
-                            var hrefDateMod = body.dateModified;
-                            var hrefHref = body.href;
-                            var hrefID = body.id;
+                            var hrefUrl = host + body.href, hrefContent = body.content, hrefDateCreated = body.dateCreated,
+                                hrefDateMod = body.dateModified, hrefHref = body.href, hrefID = body.id;
                             request.get({
                                 url: hrefUrl,
                                 json: true
@@ -289,7 +285,7 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 200 for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -299,9 +295,9 @@ describe('/question/:id/comment/:id', function () {
                         request.put({
                             url: host + '/question/' + question.id + '/comment/' + comment.id,
                             json: true,
-                            form:{
+                            form: {
                                 content: content,
-                                author_id: comment.author.id,
+                                author_id: comment.author.id
                             }
                         }, function (error, response, body) {
                             expect(response.statusCode).to.be(200);
@@ -312,20 +308,19 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (commenter) {
                     util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
-                        var firstContent = comment.content;
-                        var content = "foo";
+                        var firstContent = comment.content, content = "foo";
                         request.put({
                             url: host + '/question/' + question.id + '/comment/' + comment.id,
                             json: true,
-                            form:{
+                            form: {
                                 content: content,
-                                author_id: comment.author.id,
+                                author_id: comment.author.id
                             }
                         }, function (error, response, body) {
                             expect(body.content).to.not.be(firstContent);
@@ -337,7 +332,7 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on existing QID and nonexistent CID', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -345,9 +340,9 @@ describe('/question/:id/comment/:id', function () {
                 request.put({
                     url: host + '/question/' + question.id + '/comment/' + '99999',
                     json: true,
-                    form:{
+                    form: {
                         content: content,
-                        author_id: '99999',
+                        author_id: '99999'
                     }
                 }, function (error, response, body) {
                     expect(response.statusCode).to.be(404);
@@ -356,15 +351,15 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on nonexistent QID and nonexistent CID', function (done) {
         var content = "foo";
         request.put({
             url: host + '/question/' + '99999' + '/comment/' + '99999',
             json: true,
-            form:{
+            form: {
                 content: content,
-                author_id: '99999',
+                author_id: '99999'
             }
         }, function (error, response, body) {
             expect(response.statusCode).to.be(404);
@@ -390,7 +385,7 @@ describe('/question/:id/answer/:id/comment', function () {
             });
         });
     });
-    
+
     it('should return 200 for GET', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -405,14 +400,14 @@ describe('/question/:id/answer/:id/comment', function () {
             });
         });
     });
-    
+
     it('should return 201 created for POST', function (done) {
         var content = 'content';
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
-                        util.createUser(function (commenter) {                            
+                        util.createUser(function (commenter) {
                             request.post({
                                 url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment',
                                 form: {
@@ -429,7 +424,7 @@ describe('/question/:id/answer/:id/comment', function () {
             });
         });
     });
-    
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -445,7 +440,7 @@ describe('/question/:id/answer/:id/comment', function () {
             });
         });
     });
-    
+
     it('should return 200 for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -526,7 +521,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -566,9 +561,9 @@ describe('/question/:id/answer/:id/comment/:id', function () {
         });
     });
 
-    it('should return 204 for DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
+    it('should return 204 for DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
@@ -588,10 +583,10 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
-    it('should return 404 for GET after DELETE', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
+
+    it('should return 404 for GET after DELETE', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
@@ -600,7 +595,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                     //check if created
                                     expect(checkResponse.statusCode).to.be(200);
                                     request.del(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, deleteResponse) {
-                                        expect(deleteResponse.statusCode).to.be(204);                                        
+                                        expect(deleteResponse.statusCode).to.be(204);
                                         request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, function (error, response) {
                                             expect(response.statusCode).to.be(404);
                                             done();
@@ -614,31 +609,31 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
-    it('should return 404 for nonexistent QID, nonexistent AID and nonexistent CID', function(done) {
-        request.get(host + '/question/99999/answer/99999/comment/99999', function(error, response) {
+
+    it('should return 404 for nonexistent QID, nonexistent AID and nonexistent CID', function (done) {
+        request.get(host + '/question/99999/answer/99999/comment/99999', function (error, response) {
             expect(response.statusCode).to.be(404);
             done();
         });
     });
-    
-    it('should return 404 for existing QID, nonexistent AID and nonexistent CID', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {            
-                request.get(host + '/question/' + question.id + '/answer/99999/comment/99999', function(error, response) {
+
+    it('should return 404 for existing QID, nonexistent AID and nonexistent CID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.get(host + '/question/' + question.id + '/answer/99999/comment/99999', function (error, response) {
                     expect(response.statusCode).to.be(404);
                     done();
                 });
             });
         });
     });
-    
-    it('should return 404 for existing QID, existing AID and nonexistent CID', function(done) {
-        util.createUser(function(user) {
-            util.createQuestion(user.id, function(question) {
+
+    it('should return 404 for existing QID, existing AID and nonexistent CID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
-                        request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/99999', function(error, response) {
+                        request.get(host + '/question/' + question.id + '/answer/' + answer.id + '/comment/99999', function (error, response) {
                             expect(response.statusCode).to.be(404);
                             done();
                         });
@@ -647,16 +642,16 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should have HREF', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (answerer) {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
-                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {                                
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.get({
-                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, 
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
                                     json: true
                                 }, function (error, response, body) {
                                     expect(body.href).to.not.be(undefined);
@@ -670,7 +665,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should have HREF that can be followed correctly', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -679,15 +674,11 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                         util.createUser(function (commenter) {
                             util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
                                 request.get({
-                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id, 
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
                                     json: true
                                 }, function (error, response, body) {
-                                    var hrefUrl = host + body.href;
-                                    var hrefContent = body.content;
-                                    var hrefDateCreated = body.dateCreated;
-                                    var hrefDateMod = body.dateModified;
-                                    var hrefHref = body.href;
-                                    var hrefID = body.id;
+                                    var hrefUrl = host + body.href, hrefContent = body.content, hrefDateCreated = body.dateCreated,
+                                        hrefDateMod = body.dateModified, hrefHref = body.href, hrefID = body.id;
                                     request.get({
                                         url: hrefUrl,
                                         json: true
@@ -707,7 +698,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 200 for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -718,8 +709,8 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                 var content = 'foo';
                                 request.put({
                                     url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
-                                    json: true, 
-                                    form:{
+                                    json: true,
+                                    form: {
                                         content: content,
                                         author_id: comment.author.id
                                     }
@@ -734,7 +725,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -742,12 +733,11 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                     util.createAnswer(answerer.id, question.id, function (answer) {
                         util.createUser(function (commenter) {
                             util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
-                                var firstContent = comment.content;
-                                var content = 'foo';
+                                var firstContent = comment.content, content = 'foo';
                                 request.put({
                                     url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
-                                    json: true, 
-                                    form:{
+                                    json: true,
+                                    form: {
                                         content: content,
                                         author_id: comment.author.id
                                     }
@@ -763,7 +753,7 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on existing QID, existing AID and nonexistent CID', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -772,8 +762,8 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                         var content = 'foo';
                         request.put({
                             url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + '99999',
-                            json: true, 
-                            form:{
+                            json: true,
+                            form: {
                                 content: content,
                                 author_id: '99999'
                             }
@@ -786,15 +776,15 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on existing QID, nonexistent AID and nonexistent CID', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 var content = 'foo';
                 request.put({
                     url: host + '/question/' + question.id + '/answer/' + '99999' + '/comment/' + '99999',
-                    json: true, 
-                    form:{
+                    json: true,
+                    form: {
                         content: content,
                         author_id: '99999'
                     }
@@ -805,13 +795,13 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             });
         });
     });
-    
+
     it('should return 404 for PUT on nonexistent QID, nonexistent AID and nonexistent CID', function (done) {
         var content = 'foo';
         request.put({
             url: host + '/question/' + '99999' + '/answer/' + '99999' + '/comment/' + '99999',
-            json: true, 
-            form:{
+            json: true,
+            form: {
                 content: content,
                 author_id: '99999'
             }
