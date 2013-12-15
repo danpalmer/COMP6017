@@ -38,15 +38,16 @@ exports.list = function (model, req, res) {
 };
 
 exports.create = function (model, req, res) {
+    var newComment, errors;
     validateURLParameters(model, req);
     req.checkBody('content', 'content must not be empty').notEmpty();
     req.checkBody('author_id', 'author_id must be an integer').isInt();
-    var errors = req.validationErrors();
+    errors = req.validationErrors();
     if (errors) {
         return res.json(errors, 400);
     }
 
-    var newComment = {
+    newComment = {
         content: req.body.content,
         dateCreated: new Date(),
         dateModified: new Date(),
