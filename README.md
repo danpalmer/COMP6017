@@ -79,21 +79,39 @@ Extra Returned Fields:
 
 User Provided Fields:
 
- - **title**:
- - **content**:
- - **author_id**:
+ - **title**: String, Editable, Required.
+ - **content**: String, Editable, Required.
+ - **author_id**: Number (author ID), Required.
 
 Extra Returned Fields:
 
- - **dateCreated**:
- - **dateModified**:
- - **comments**:
- - **answers**:
+ - **dateCreated**: Date, Read-Only.
+ - **dateModified**: Date, Read-Only.
 
 ##### Answer
 
+User Provided Fields:
+
+ - **content**: String, Editable, Required.
+ - **author_id**: Number (author ID), Required.
+
+Extra Returned Fields:
+
+ - **dateCreated**: Date, Read-Only.
+ - **dateModified**: Date, Read-Only.
+
 
 ##### Comment
+
+User Provided Fields:
+
+ - **content**: String, Editable, Required.
+ - **author_id**: Number (author ID), Required.
+
+Extra Returned Fields:
+
+ - **dateCreated**: Date, Read-Only.
+ - **dateModified**: Date, Read-Only.
 
 
 ### Design Decisions
