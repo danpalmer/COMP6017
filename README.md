@@ -2,7 +2,7 @@
 
 ### API Endpoints
 
-All endpoints reutrn `application/javascript` unless otherwise stated. All endpoints will respond to the **HEAD** method with the appropriate headers.
+All endpoints reutrn `application/javascript` unless otherwise stated. All endpoints will respond to the **HEAD** method with the appropriate headers, and **OPTIONS** with the available methods for a given endpoint.
 
 ##### /
  - **GET**: returns this documentation formatted as `text/html`.
@@ -51,7 +51,6 @@ All endpoints reutrn `application/javascript` unless otherwise stated. All endpo
  - **GET**: returns the specified comment for the specified answer on the specified question.
  - **PUT**: updates returns the specified comment for the specified answer on the specified question.
  - **DELETE**: deletes the specified comment for the specified answer on the specified question.
-
 
 
 ##### URL Parameter Names:
@@ -117,12 +116,91 @@ Extra Returned Fields:
 
 We have made the decision to implement [JSON HAL (Hypertext Application Language)](http://tools.ietf.org/html/draft-kelly-json-hal-06). Linked resources are included in the `_links` object, where keys are the relation name, and values are an object with an `href` link to the resource. Aternatively, resources can be included directly in the `_embedded` object, where keys are the relation name, and values are the representation of that resource.
 
-Here is a list of questions as an example of the usage of `_links`:
+Here is a single question from a list of questions given by `/question` as an example of the usage of `_links`:
+```json
+{
+	title: "Test Question",
+	content: "Lorem ipsum dolor sit amet.",
+	dateCreated: "2013-12-14T20:06:34.519Z",
+	dateModified: "2013-12-14T20:06:34.519Z",
+	id: 6,
+	_links: {
+		self: { href: "/question/6" },
+		author: { href: "/user/6" },
+		answers: { href: "/question/6/answer" },
+		comments: {	href: "/question/6/comment"	}
+	}
+}
+```
 
-
-
-Here is single question with included resources to demonstrate usage of `_embedded`:
-
+Here is the same question with included resources, as in `/question/:id` to demonstrate usage of `_embedded`:
+```
+{
+	title: "Test Question",
+	content: "Lorem ipsum dolor sit amet.",
+	dateCreated: "2013-12-14T20:06:34.519Z",
+	dateModified: "2013-12-14T20:06:34.519Z",
+	id: 6,
+	_links: {
+		self: {	href: "/question/6" }
+	},
+	_embedded: {
+		author: {
+			name: "Test User",
+			email: "test@example.com",
+			dateSignedUp: "2013-12-14T20:06:34.515Z",
+			dateModified: "2013-12-14T20:06:34.515Z",
+			id: 6,
+			_links: {
+				self: {	href: "/user/6" }
+			}
+		},
+		answers: [{
+			content: "This is a test answer",
+			dateCreated: "2013-12-15T19:59:14.984Z",
+			dateModified: "2013-12-15T19:59:14.984Z",
+			id: 77,
+			_links: {
+				self: {	href: "/question/6/answer/77" },
+				comments: {	href: "/question/6/answer/77/comment" }
+			},
+			_embedded: {
+				author: {
+					name: "Test User",
+					email: "test@example.com",
+					dateSignedUp: "2013-12-14T20:06:34.414Z",
+					dateModified: "2013-12-14T20:06:34.414Z",
+					id: 1,
+					_links: {
+						self: {	href: "/user/1"	}
+					}
+				}
+			}
+		}],
+		comments: [{
+			content: "test content",
+			dateCreated: "2013-12-14T20:06:34.525Z",
+			dateModified: "2013-12-14T20:06:34.525Z",
+			id: 1,
+			_links: {
+				self: {	href: "/question/6/comment/1" }
+			},
+			_embedded: {
+				author: {
+					name: "Test User",
+					email: "test@example.com",
+					dateSignedUp: "2013-12-14T20:06:34.515Z",
+					dateModified: "2013-12-14T20:06:34.515Z",
+					id: 6,
+					_links: {
+						self: {	href: "/user/6"	}
+					}
+				}
+			}
+		}]
+	}
+}
+```
 
 
 For backwards compatibility with clients who are not JSON HAL aware, and for compatibility with the Express web framework, resources are returned as `application/json` instead of `application/hal+json` as recommended.
