@@ -226,5 +226,5 @@ describe('/question/:id/answer/:id', function () {
             expect(response.statusCode).to.be(404);
             done();
         });
-    });    
+    });
 });

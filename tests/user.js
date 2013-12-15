@@ -141,10 +141,9 @@ describe('/user/:id', function() {
             expect(response.statusCode).to.be(404);
             done();
         });
-    });  
+    });
 
     // PUT should update an existing user
     // PUT should return 404 for unknown user
-    // DELETE should return 404 for unknown user
 
 });

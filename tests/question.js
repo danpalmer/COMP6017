@@ -164,19 +164,19 @@ describe('/question/:id', function () {
         });
     });
   
-  it('should return 404 for GET after DELETE', function(done) {
-    util.createUser(function(user) {
-      util.createQuestion(user.id, function(question) {
-        request.del(host + '/question/' + question.id, function(deleteError, deleteResponse) {
-          expect(deleteResponse.statusCode).to.be(204);
-          request.get(host + '/question/' + question.id, function(checkError, checkResponse) {
-            expect(checkResponse.statusCode).to.be(404);
-            done();
-          });
+    it('should return 404 for GET after DELETE', function(done) {
+        util.createUser(function(user) {
+            util.createQuestion(user.id, function(question) {
+                request.del(host + '/question/' + question.id, function(deleteError, deleteResponse) {
+                    expect(deleteResponse.statusCode).to.be(204);
+                    request.get(host + '/question/' + question.id, function(checkError, checkResponse) {
+                        expect(checkResponse.statusCode).to.be(404);
+                        done();
+                    });
+                });
+            });
         });
-      });
     });
-  });
   
     it('should return 404 for nonexistent QID', function(done) {
         request.get(host + '/question/99999', function(error, response) {
