@@ -59,11 +59,6 @@ HTTP Status Codes:
 
 ### To Do
 
- - Following HREFs on creating models
-   - Create a new item
-   - Check it has an HREF (assert)
-   - Follow the HREF
-   - Check it is the same item
  - Test PUTs for updates
    - Making sure the update happens
    - Check status code
