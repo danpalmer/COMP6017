@@ -5,7 +5,7 @@
 All endpoints reutrn `application/javascript` unless otherwise stated. All endpoints will respond to the **HEAD** method with the appropriate headers, and **OPTIONS** with the available methods for a given endpoint.
 
 ##### /
- - **GET**: returns this documentation formatted as `text/html`.
+ - **GET**: if the request header specifies `Accept: application/json` (or the HAL variant), then this returns the valid links formatted in JSON HAL, otherwise this returns the README formatted as `text/html`.
 
 ##### /user
  - **GET**: returns a list of users.  
