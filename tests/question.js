@@ -40,18 +40,6 @@ describe('/question', function () {
             });
         });
     });
-
-    /*
-    Need author key in POSTed form before test can be done
-    it('should have a user', function (done) {
-    });
-    */
-
-    /*
-    Need author key in POSTed form before test can be done
-    it('should link to a valid user', function (done) { 
-    });
-    */    
     
     it('server should respond for HEAD', function (done) {
         request.head(host + '/question', function (error, response) {
@@ -226,6 +214,74 @@ describe('/question/:id', function () {
                         expect(hrefBody.id).to.be(hrefID);
                         done();
                     });
+                });
+            });
+        });
+    });
+
+    it('should return 200 for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var title = 'foo';
+                var content = 'bar';
+                request.put({
+                    url:host + '/question/' + question.id, 
+                    json:true, 
+                    form:{
+                        title: title, 
+                        content: content,
+                        author_id: question.author.id,
+                    }
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.be(200);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should update target for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var firstTitle = question.title;
+                var firstContent = question.content;
+                var title = 'foo';
+                var content = 'bar';
+                request.put({
+                    url:host + '/question/' + question.id, 
+                    json:true, 
+                    form:{
+                        title: title, 
+                        content: content,
+                        author_id: question.author.id,
+                    }
+                }, function(error, response, body) {
+                    expect(body.title).to.not.be(firstTitle);
+                    expect(body.content).to.not.be(firstContent);
+                    expect(body.title).to.be(title);
+                    expect(body.content).to.be(content);
+                    done();
+                });
+            });
+        });
+    });
+
+    it('should return 404 for PUT on nonexistant QID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var title = 'foo';
+                var content = 'bar';
+                request.put({
+                    url:host + '/question/' + '99999', 
+                    json:true, 
+                    form:{
+                        title: title, 
+                        content: content,
+                        author_id: question.author.id,
+                    }
+                }, function(error, response, body) {
+                    expect(response.statusCode).to.be(404);
+                    done();
                 });
             });
         });

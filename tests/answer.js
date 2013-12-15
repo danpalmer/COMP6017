@@ -279,4 +279,90 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
+    
+    it('should return 200 for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        var content = "foo";
+                        request.put({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
+                            json: true,
+                            form:{
+                                content: content,
+                                author_id: answer.author.id,
+                                question_id: question.id
+                            }
+                        }, function (error, response, body) {
+                            expect(response.statusCode).to.be(200);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should update target for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        var firstContent = answer.content;
+                        var content = "foo";
+                        request.put({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
+                            json: true,
+                            form:{
+                                content: content,
+                                author_id: answer.author.id,
+                                question_id: question.id
+                            }
+                        }, function (error, response, body) {
+                            expect(body.content).to.not.be(firstContent);
+                            expect(body.content).to.be(content);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on existing QID and nonexistent AID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var content = "foo";
+                request.put({
+                    url: host + '/question/' + question.id + '/answer/' + '99999',
+                    json: true,
+                    form:{
+                        content: content,
+                        author_id: '99999',
+                        question_id: question.id
+                    }
+                }, function (error, response, body) {
+                    expect(response.statusCode).to.be(404);
+                    done();
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on nonexistent QID and nonexistent AID', function (done) {
+        var content = "foo";
+        request.put({
+            url: host + '/question/' + '99999' + '/answer/' + '99999',
+            json: true,
+            form:{
+                content: content,
+                author_id: '99999',
+                question_id: '99999'
+            }
+        }, function (error, response, body) {
+            expect(response.statusCode).to.be(404);
+            done();
+        });
+    });
 });

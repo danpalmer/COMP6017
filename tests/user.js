@@ -185,7 +185,64 @@ describe('/user/:id', function() {
         });
 	});
     
+    it('should return 200 for PUT', function(done) {
+        util.createUser(function (user) {
+            var name = 'foo2';
+            var email = 'foo2@bar.com';
+            request.put({
+                url:host + '/user/' + user.id, 
+                json:true, 
+                form:{
+                    name: name, 
+                    email: email
+                }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.be(200);
+                done();
+            });
+        });
+    });
     
+    it('should update target for PUT', function(done) {
+        util.createUser(function (user) {
+            var firstName = user.name;
+            var firstEmail = user.email;
+            var name = 'foo2';
+            var email = 'foo2@bar.com';
+            request.put({
+                url:host + '/user/' + user.id, 
+                json:true, 
+                form:{
+                    name: name, 
+                    email: email
+                }
+            }, function(error, response, body) {
+                expect(body.name).to.not.be(firstName);
+                expect(body.email).to.not.be(firstEmail);
+                expect(body.name).to.be(name);
+                expect(body.email).to.be(email);
+                done();
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on nonexistant UID', function(done) {
+        util.createUser(function (user) {
+            var name = 'foo2';
+            var email = 'foo2@bar.com';
+            request.put({
+                url:host + '/user/' + '99999', 
+                json:true, 
+                form:{
+                    name: name, 
+                    email: email
+                }
+            }, function(error, response, body) {
+                expect(response.statusCode).to.be(404);
+                done();
+            });
+        });
+    });
 
     // PUT should update an existing user
     // PUT should return 404 for unknown user

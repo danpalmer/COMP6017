@@ -289,6 +289,88 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
+    
+    it('should return 200 for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        var content = "foo";
+                        request.put({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true,
+                            form:{
+                                content: content,
+                                author_id: comment.author.id,
+                            }
+                        }, function (error, response, body) {
+                            expect(response.statusCode).to.be(200);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should update target for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        var firstContent = comment.content;
+                        var content = "foo";
+                        request.put({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true,
+                            form:{
+                                content: content,
+                                author_id: comment.author.id,
+                            }
+                        }, function (error, response, body) {
+                            expect(body.content).to.not.be(firstContent);
+                            expect(body.content).to.be(content);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on existing QID and nonexistent CID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var content = "foo";
+                request.put({
+                    url: host + '/question/' + question.id + '/comment/' + '99999',
+                    json: true,
+                    form:{
+                        content: content,
+                        author_id: '99999',
+                    }
+                }, function (error, response, body) {
+                    expect(response.statusCode).to.be(404);
+                    done();
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on nonexistent QID and nonexistent CID', function (done) {
+        var content = "foo";
+        request.put({
+            url: host + '/question/' + '99999' + '/comment/' + '99999',
+            json: true,
+            form:{
+                content: content,
+                author_id: '99999',
+            }
+        }, function (error, response, body) {
+            expect(response.statusCode).to.be(404);
+            done();
+        });
+    });
 });
 
 describe('/question/:id/answer/:id/comment', function () {
@@ -623,6 +705,119 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                     });
                 });
             });
+        });
+    });
+    
+    it('should return 200 for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                var content = 'foo';
+                                request.put({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true, 
+                                    form:{
+                                        content: content,
+                                        author_id: comment.author.id
+                                    }
+                                }, function (error, response, body) {
+                                    expect(response.statusCode).to.be(200);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should update target for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                var firstContent = comment.content;
+                                var content = 'foo';
+                                request.put({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true, 
+                                    form:{
+                                        content: content,
+                                        author_id: comment.author.id
+                                    }
+                                }, function (error, response, body) {
+                                    expect(body.content).to.not.be(firstContent);
+                                    expect(body.content).to.be(content);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on existing QID, existing AID and nonexistent CID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        var content = 'foo';
+                        request.put({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + '99999',
+                            json: true, 
+                            form:{
+                                content: content,
+                                author_id: '99999'
+                            }
+                        }, function (error, response, body) {
+                            expect(response.statusCode).to.be(404);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on existing QID, nonexistent AID and nonexistent CID', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var content = 'foo';
+                request.put({
+                    url: host + '/question/' + question.id + '/answer/' + '99999' + '/comment/' + '99999',
+                    json: true, 
+                    form:{
+                        content: content,
+                        author_id: '99999'
+                    }
+                }, function (error, response, body) {
+                    expect(response.statusCode).to.be(404);
+                    done();
+                });
+            });
+        });
+    });
+    
+    it('should return 404 for PUT on nonexistent QID, nonexistent AID and nonexistent CID', function (done) {
+        var content = 'foo';
+        request.put({
+            url: host + '/question/' + '99999' + '/answer/' + '99999' + '/comment/' + '99999',
+            json: true, 
+            form:{
+                content: content,
+                author_id: '99999'
+            }
+        }, function (error, response, body) {
+            expect(response.statusCode).to.be(404);
+            done();
         });
     });
 });
