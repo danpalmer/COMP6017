@@ -225,15 +225,9 @@ We have complied with JSLint, when run with the following options: `--node --dev
 
 ### To Do
 
- - Test PUTs for updates
-   - Making sure the update happens
-   - Check status code
- - Test all models (and sub models) contain an HREF
-   - Check where appropriate that they link instead of containing actual representations
  - Test last modified not changed on idempotent methods (HEAD, GET)
  - Test it is changed on POST and PUT
  - Test whether returned objects (for GET) are valid
- - Fix tests for question creation to include correct parameters
 
  /question
  	- Just question objects, link to comment lists, link to author
