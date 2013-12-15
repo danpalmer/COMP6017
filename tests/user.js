@@ -142,6 +142,19 @@ describe('/user/:id', function() {
             done();
         });
     });
+    
+    it('should have HREF', function(done) {
+        util.createUser(function (user) {
+            request.get({
+                url: host + '/user/' + user.id,
+                json: true
+            }, function (error, response, body) {
+                expect(body.href).to.not.be(undefined);
+                expect(body.href).to.not.be(null);
+                done();
+            });
+        });
+	});
 
     // PUT should update an existing user
     // PUT should return 404 for unknown user
