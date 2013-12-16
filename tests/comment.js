@@ -317,6 +317,26 @@ describe('/question/:id/comment/:id', function () {
         });
     });
 
+    it('should return 400 for PUT without required fields', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        request.put({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true,
+                            form: {
+                            }
+                        }, function (error, response, body) {
+                            expect(response.statusCode).to.be(400);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -812,6 +832,30 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                     }
                                 }, function (error, response, body) {
                                     expect(response.statusCode).to.be(200);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should return 400 for PUT without required fields', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                request.put({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true,
+                                    form: {
+                                    }
+                                }, function (error, response, body) {
+                                    expect(response.statusCode).to.be(400);
                                     done();
                                 });
                             });

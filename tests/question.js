@@ -241,6 +241,22 @@ describe('/question/:id', function () {
         });
     });
 
+    it('should return 400 for PUT without required fields', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.put({
+                    url: host + '/question/' + question.id,
+                    json: true,
+                    form: {
+                    }
+                }, function (error, response, body) {
+                    expect(response.statusCode).to.be(400);
+                    done();
+                });
+            });
+        });
+    });
+
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {

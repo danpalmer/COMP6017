@@ -208,6 +208,20 @@ describe('/user/:id', function () {
         });
     });
 
+    it('should return 400 for PUT without required fields', function (done) {
+        util.createUser(function (user) {
+            request.put({
+                url: host + '/user/' + user.id,
+                json: true,
+                form: {
+                }
+            }, function (error, response, body) {
+                expect(response.statusCode).to.be(400);
+                done();
+            });
+        });
+    });
+
     it('should update target for PUT', function (done) {
         util.createUser(function (user) {
             var firstName = user.name, firstEmail = user.email, name = 'foo2', email = 'foo2@bar.com';
