@@ -41,6 +41,20 @@ describe('/question', function () {
         });
     });
 
+    it('should return 400 for POST without required fields', function (done) {
+        util.createUser(function (user) {
+            request.post({
+                url: host + '/question',
+                json: true,
+                form: {
+                }
+            }, function (error, response) {
+                expect(response.statusCode).to.be(400);
+                done();
+            });
+        });
+    });
+
     it('server should respond for HEAD', function (done) {
         request.head(host + '/question', function (error, response) {
             expect(response).to.not.be(undefined);

@@ -50,6 +50,23 @@ describe('/question/:id/answer', function () {
         });
     });
 
+    it('should return 400 for POST without required fields', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    request.post({
+                        url: host + '/question/' + question.id + '/answer',
+                        form: {
+                        }
+                    }, function (error, response) {
+                        expect(response.statusCode).to.be(400);
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {

@@ -48,6 +48,21 @@ describe('/question/:id/comment', function () {
         });
     });
 
+    it('should return 400 for POST without required fields', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.post({
+                    url: host + '/question/' + question.id + '/comment',
+                    form: {
+                    }
+                }, function (error, response) {
+                    expect(response.statusCode).to.be(400);
+                    done();
+                });
+            });
+        });
+    });
+
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -507,6 +522,27 @@ describe('/question/:id/answer/:id/comment', function () {
                                 }
                             }, function (error, response) {
                                 expect(response.statusCode).to.be(201);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should return 400 for POST without required fields', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            request.post({
+                                url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment',
+                                form: {
+                                }
+                            }, function (error, response) {
+                                expect(response.statusCode).to.be(400);
                                 done();
                             });
                         });

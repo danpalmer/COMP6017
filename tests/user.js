@@ -29,6 +29,13 @@ describe('/user', function () {
         });
     });
 
+    it('should return 400 for POST without required fields', function (done) {
+        request.post(host + '/user', {form: {}}, function (error, response) {
+            expect(response.statusCode).to.be(400);
+            done();
+        });
+    });
+
     it('server should respond for HEAD', function (done) {
         request.head(host + '/user', function (error, response) {
             expect(response).to.not.be(undefined);
