@@ -27,24 +27,30 @@ exports.create = function (req, res) {
         return res.json(errors, 400);
     }
 
-    req.models.answer.create({
-        content: req.body.content,
-        author_id: req.body.author_id,
-        dateCreated: new Date(),
-        dateModified: new Date(),
-        question_id: req.params.qid
-    }, function (err, answer) {
-        if (!answer) {
-            res.status(503); // server is unable to store the representation
-            return res.json({error: err});
+    req.models.user.get(req.body.author_id, function (err, user) {
+        if (!user) {
+            res.status(400);
+            return res.json(err);
         }
-        // Note: we need to ask for the question again in order for NodeORM to fill
-        // associations. See this issue:
-        // https://github.com/dresende/node-orm2/issues/406
-        req.models.answer.get(answer.id, function (aErr, fullAnswer) {
-            res.status(201);
-            res.setHeader('Last-Modified', fullAnswer.dateModified.toUTCString());
-            return res.json(fullAnswer.renderLong());
+        req.models.answer.create({
+            content: req.body.content,
+            author_id: +req.body.author_id,
+            dateCreated: new Date(),
+            dateModified: new Date(),
+            question_id: +req.params.qid
+        }, function (err, answer) {
+            if (!answer) {
+                res.status(503); // server is unable to store the representation
+                return res.json({error: err});
+            }
+            // Note: we need to ask for the question again in order for NodeORM to fill
+            // associations. See this issue:
+            // https://github.com/dresende/node-orm2/issues/406
+            req.models.answer.get(answer.id, function (aErr, fullAnswer) {
+                res.status(201);
+                res.setHeader('Last-Modified', fullAnswer.dateModified.toUTCString());
+                return res.json(fullAnswer.renderLong());
+            });
         });
     });
 };

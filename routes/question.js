@@ -21,24 +21,30 @@ exports.create = function (req, res) {
         return res.json(errors, 400);
     }
 
-    req.models.question.create({
-        title: req.body.title,
-        content: req.body.content,
-        dateCreated: new Date(),
-        dateModified: new Date(),
-        author_id: req.body.author_id
-    }, function (err, question) {
-        if (!question) {
-            res.status(503); // server is unable to store the representation
-            return res.json({error: err});
+    req.models.user.get(req.body.author_id, function (err, user) {
+        if (!user) {
+            res.status(400);
+            return res.json(err);
         }
-        // Note: we need to ask for the question again in order for NodeORM to fill
-        // associations. See this issue:
-        // https://github.com/dresende/node-orm2/issues/406
-        req.models.question.get(question.id, function (qErr, fullQuestion) {
-            res.status(201);
-            res.setHeader('Last-Modified', fullQuestion.dateModified.toUTCString());
-            return res.json(fullQuestion.renderLong());
+        req.models.question.create({
+            title: req.body.title,
+            content: req.body.content,
+            dateCreated: new Date(),
+            dateModified: new Date(),
+            author_id: req.body.author_id
+        }, function (err, question) {
+            if (!question) {
+                res.status(503); // server is unable to store the representation
+                return res.json({error: err});
+            }
+            // Note: we need to ask for the question again in order for NodeORM to fill
+            // associations. See this issue:
+            // https://github.com/dresende/node-orm2/issues/406
+            req.models.question.get(question.id, function (qErr, fullQuestion) {
+                res.status(201);
+                res.setHeader('Last-Modified', fullQuestion.dateModified.toUTCString());
+                return res.json(fullQuestion.renderLong());
+            });
         });
     });
 };

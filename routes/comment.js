@@ -61,19 +61,24 @@ exports.create = function (model, req, res) {
         newComment.answer_id = req.params.rid;
     }
 
-    req.models.comment.create(newComment, function (err, comment) {
-        if (!comment) {
-            res.status(503);
-            return res.json({error: err});
+    req.models.user.get(req.body.author_id, function (err, user) {
+        if (!user) {
+            res.status(400);
+            return res.json(err);
         }
-        console.log(JSON.stringify(comment));
-        // Note: we need to ask for the question again in order for NodeORM to fill
-        // associations. See this issue:
-        // https://github.com/dresende/node-orm2/issues/406
-        req.models.comment.get(comment.id, function (cErr, fullComment) {
-            res.status(201);
-            res.setHeader('Last-Modified', fullComment.dateModified.toUTCString());
-            return res.json(fullComment.renderLong());
+        req.models.comment.create(newComment, function (err, comment) {
+            if (!comment) {
+                res.status(503);
+                return res.json({error: err});
+            }
+            // Note: we need to ask for the question again in order for NodeORM to fill
+            // associations. See this issue:
+            // https://github.com/dresende/node-orm2/issues/406
+            req.models.comment.get(comment.id, function (cErr, fullComment) {
+                res.status(201);
+                res.setHeader('Last-Modified', fullComment.dateModified.toUTCString());
+                return res.json(fullComment.renderLong());
+            });
         });
     });
 };
