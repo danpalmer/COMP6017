@@ -246,7 +246,7 @@ For backwards compatibility with clients who are not JSON HAL aware, and for com
 For testing the service we have created an automated test suite using Mocha -- a Node.js package for writing TDD/BDD style asynchronous tests. Assuming that the npm packages specified in `package.json` are installed to `node_modules`, and assuming the server is running on the default port (3000), tests can be run with the following command:
 
 ```
-$ node_modules/mocha/bin/mocha -R spec tests
+$ node_modules/.bin/mocha -R spec tests
 ```
 
 This prints out a list of tests and their status, printing stack traces wherever they may fail. As of submission, the tests are all passing. If any failing tests are encountered, ensure the server is running on port 3000, is accessible, that the project directory is writeable for the database creation, and that all modules in `package.json` have successfully installed. If these requirements have been satisfied, contact Dan Palmer and Sam Bull.
