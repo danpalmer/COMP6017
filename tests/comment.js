@@ -810,4 +810,65 @@ describe('/question/:id/answer/:id/comment/:id', function () {
             done();
         });
     });
+
+    it('should contain an HREF to its parent question', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createAnswer(user.id, question.id, function (answer) {
+                    util.createComment(user.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                        request.get({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                            json: true
+                        }, function (error, response) {
+                            expect(response.body._links.parent).to.not.be(null);
+                            expect(response.body._links.parent.href).to.not.be(null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should contain a parent HREF that dereferences to an answer', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createAnswer(user.id, question.id, function (answer) {
+                    util.createComment(user.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                        request.get({
+                            url: host + comment._links.parent.href,
+                            json: true
+                        }, function (error, response) {
+                            expect(response.body.content).to.not.be(null);
+                            expect(response.body.content).to.be(question.content);
+                            expect(response.body._links.self.href).to.be('/question/' + question.id + '/answer/' + answer.id);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should contain a parent HREF that dereferences to a question', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createAnswer(user.id, question.id, function (answer) {
+                    util.createComment(user.id, util.type.QUESTION, question.id, null, function (comment) {
+                        request.get({
+                            url: host + comment._links.parent.href,
+                            json: true
+                        }, function (error, response) {
+                            expect(response.body.title).to.not.be(null);
+                            expect(response.body.title).to.be(question.title);
+                            expect(response.body.content).to.not.be(null);
+                            expect(response.body.content).to.be(question.content);
+                            expect(response.body._links.self.href).to.be('/question/' + question.id);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

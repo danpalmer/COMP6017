@@ -58,7 +58,7 @@ exports.create = function (model, req, res) {
         newComment.question_id = req.params.rid;
     } else if (model === 'answer') {
         newComment.question_id = req.params.qid;
-        newComment.answer_id = req.params.aid;
+        newComment.answer_id = req.params.rid;
     }
 
     req.models.comment.create(newComment, function (err, comment) {
@@ -66,11 +66,11 @@ exports.create = function (model, req, res) {
             res.status(503);
             return res.json({error: err});
         }
+        console.log(JSON.stringify(comment));
         // Note: we need to ask for the question again in order for NodeORM to fill
         // associations. See this issue:
         // https://github.com/dresende/node-orm2/issues/406
         req.models.comment.get(comment.id, function (cErr, fullComment) {
-            console.log(JSON.stringify(fullComment));
             res.status(201);
             res.setHeader('Last-Modified', fullComment.dateModified.toUTCString());
             return res.json(fullComment.renderLong());
