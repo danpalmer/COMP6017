@@ -308,4 +308,24 @@ describe('/question/:id', function () {
             });
         });
     });
+
+    it('should modify dateModified for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                var dateModified = question.dateModified, title = 'foo', content = 'bar';
+                request.put({
+                    url: host + '/question/' + question.id,
+                    json: true,
+                    form: {
+                        title: title,
+                        content: content,
+                        author_id: question._embedded.author.id
+                    }
+                }, function (error, response, body) {
+                    expect(body.dateModified).to.be.greaterThan(dateModified);
+                    done();
+                });
+            });
+        });
+    });
 });

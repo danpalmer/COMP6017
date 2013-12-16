@@ -400,4 +400,28 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
+
+    it('should modify dateModified for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        var dateModified = answer.dateModified, content = "foo";
+                        request.put({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
+                            json: true,
+                            form: {
+                                content: content,
+                                author_id: answer._embedded.author.id,
+                                question_id: question.id
+                            }
+                        }, function (error, response, body) {
+                            expect(body.dateModified).to.be.greaterThan(dateModified);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

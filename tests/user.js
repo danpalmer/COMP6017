@@ -257,4 +257,21 @@ describe('/user/:id', function () {
             });
         });
     });
+
+    it('should modify dateModified for PUT', function (done) {
+        util.createUser(function (user) {
+            var dateModified = user.dateModified, name = 'foo2', email = 'foo2@bar.com';
+            request.put({
+                url: host + '/user/' + user.id,
+                json: true,
+                form: {
+                    name: name,
+                    email: email
+                }
+            }, function (error, response, body) {
+                expect(body.dateModified).to.be.greaterThan(dateModified);
+                done();
+            });
+        });
+    });
 });

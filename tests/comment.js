@@ -406,6 +406,29 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
+
+    it('should modify dateModified for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {                        
+                        var dateModified = comment.dateModified, content = "foo";
+                        request.put({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true,
+                            form: {
+                                content: content,
+                                author_id: comment._embedded.author.id
+                            }
+                        }, function (error, response, body) {
+                            expect(body.dateModified).to.be.greaterThan(dateModified);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 describe('/question/:id/answer/:id/comment', function () {
@@ -950,6 +973,33 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                 }, function (error, response) {
                                     var responseDateMod = Date.parse(response.headers['last-modified']);
                                     expect(responseDateMod).to.be(dateModified);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should modify dateModified for PUT', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                var dateModified = comment.dateModified, content = 'foo';
+                                request.put({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true,
+                                    form: {
+                                        content: content,
+                                        author_id: comment._embedded.author.id
+                                    }
+                                }, function (error, response, body) {
+                                    expect(body.dateModified).to.be.greaterThan(dateModified);
                                     done();
                                 });
                             });
