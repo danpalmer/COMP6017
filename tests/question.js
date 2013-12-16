@@ -56,6 +56,25 @@ describe('/question', function () {
         });
     });
 
+    it('should have same dateModified as dateCreated for POST', function (done) {
+        var title = 'title',
+            content = 'content';
+        util.createUser(function (user) {
+            request.post({
+                url: host + '/question',
+                json: true,
+                form: {
+                    title: title,
+                    content: content,
+                    author_id: user.id
+                }
+            }, function (error, response, body) {
+                expect(body.dateModified).to.be(body.dateCreated);
+                done();
+            });
+        });
+    });
+
     // POST with invalid author returns 400 bad request
     // POST with missing values returns 400 bad request
 });
@@ -101,18 +120,6 @@ describe('/question/:id', function () {
             });
         });
     });
-
-    /*
-    Need author key in POSTed form before test can be done
-    it('should have a user', function (done) {
-    });
-    */
-
-    /*
-    Need author key in POSTed form before test can be done
-    it('should link to a valid user', function (done) { 
-    });
-    */
 
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {

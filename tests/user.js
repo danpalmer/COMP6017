@@ -43,6 +43,21 @@ describe('/user', function () {
             done();
         });
     });
+
+    it('should have same dateModified as dateSignedUp for POST', function (done) {
+        request.post({
+            url: host + '/user',
+            json: true,
+            form: {
+                'name': 'foo',
+                'email': 'bar@example.com',
+                'dateSignedUp': Date.now()
+            }
+        }, function (error, response, body) {
+            expect(body.dateModified).to.be(body.dateSignedUp);
+            done();
+        });
+    });
 });
 
 describe('/user/:id', function () {

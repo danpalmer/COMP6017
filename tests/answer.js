@@ -49,17 +49,6 @@ describe('/question/:id/answer', function () {
             });
         });
     });
-    /*
-    Need author key in POSTed form before test can be done
-    it('should have a user', function(done) {
-    });
-    */
-
-    /*
-    Need author key in POSTed form before test can be done
-    it('should link to a valid user', function(done) { 
-    });
-    */
 
     it('server should respond for HEAD', function (done) {
         util.createUser(function (user) {
@@ -79,6 +68,27 @@ describe('/question/:id/answer', function () {
                 request.head(host + '/question/' + question.id + '/answer', function (error, response) {
                     expect(response.statusCode).to.be(200);
                     done();
+                });
+            });
+        });
+    });
+
+    it('should have same dateModified as dateCreated for POST', function (done) {
+        var content = 'content';
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    request.post({
+                        url: host + '/question/' + question.id + '/answer',
+                        json: true,
+                        form: {
+                            content: content,
+                            author_id: answerer.id
+                        }
+                    }, function (error, response, body) {
+                        expect(body.dateModified).to.be(body.dateCreated);
+                        done();
+                    });
                 });
             });
         });
