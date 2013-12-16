@@ -255,21 +255,3 @@ This prints out a list of tests and their status, printing stack traces wherever
 ### JSLint Compliance
 
 We have complied with JSLint, when run with the following options: `--node --devel --sloppy --unparam --nomen`. The tests are executed within a Mocha environment, which provides the global functions `describe` and `it` (along with others that we have no used), and therefore the tests will only pass JSLint validation with `--predef describe --predef it`. 
-
-
-
-### To Do
-
- - Finish status code checks
- - Make it so that 400 is responded with when POSTing with invalid field (i.e author_id: '99999')
-
- /question
- 	- Just question objects, link to comment lists, link to author
- /question/:id
- 	- Question object, list of comments with authors, gives author, list of answers, with answer authors, answers have link to list of comments.
- /question/:id/comment
- 	- List of comments with authors
- /question/:id/answer
- 	- List of answers with authors
- /question/:id/answer/:id/comment
- 	- List of comments with authors
