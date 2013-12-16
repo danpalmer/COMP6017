@@ -21,7 +21,15 @@ exports.list = function (req, res) {
             var latest = _.max(answers, function (a) { return a.dateModified; });
             res.setHeader('Last-Modified', latest.dateModified.toUTCString());
         }
-        res.json(utils.renderModels(answers));
+        res.json({
+            _links: {
+                self: { href: '/question/' + req.params.qid + '/answer' }
+            },
+            _embedded: {
+                answers: utils.renderModels(answers)
+            },
+            count: answers.length
+        });
     });
 };
 

@@ -15,7 +15,15 @@ exports.list = function (req, res) {
             var latest = _.max(users, function (u) { return u.dateModified; });
             res.setHeader('Last-Modified', latest.dateModified.toUTCString());
         }
-        res.json(utils.renderModels(users));
+        res.json({
+            _links: {
+                self: { href: '/user' }
+            },
+            _embedded: {
+                users: utils.renderModels(users)
+            },
+            count: users.length
+        });
     });
 };
 

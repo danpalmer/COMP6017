@@ -34,16 +34,30 @@ exports.list = function (model, req, res) {
             return res.json({error: modelError});
         }
         item.getComments(function (commentErr, comments) {
+            var url, latest;
             if (!comments) {
                 res.status(503);
                 return res.json({error: commentErr});
             }
             res.status(200);
             if (comments.length) {
-                var latest = _.max(comments, function (c) { return c.dateModified; });
+                latest = _.max(comments, function (c) { return c.dateModified; });
                 res.setHeader('Last-Modified', latest.dateModified.toUTCString());
             }
-            return res.json(utils.renderModels(comments));
+            if (model === 'question') {
+                url = '/question/' + req.params.rid + '/comment';
+            } else if (model === 'answer') {
+                url = '/question/' + req.params.qid + '/answer/' + req.params.rid + '/comment';
+            }
+            res.json({
+                _links: {
+                    self: { href: url }
+                },
+                _embedded: {
+                    comments: utils.renderModels(comments)
+                },
+                count: comments.length
+            });
         });
     });
 };
