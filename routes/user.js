@@ -47,6 +47,7 @@ exports.create = function (req, res) {
         }
         res.status(201);
         res.setHeader('Last-Modified', user.dateModified.toUTCString());
+        res.setHeader('Location', user.href());
         return res.json(user.renderLong());
     });
 };

@@ -102,6 +102,7 @@ exports.create = function (model, req, res) {
             req.models.comment.get(comment.id, function (cErr, fullComment) {
                 res.status(201);
                 res.setHeader('Last-Modified', fullComment.dateModified.toUTCString());
+                res.setHeader('Location', fullComment.href());
                 return res.json(fullComment.renderLong());
             });
         });

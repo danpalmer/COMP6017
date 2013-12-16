@@ -58,6 +58,7 @@ exports.create = function (req, res) {
             req.models.question.get(question.id, function (qErr, fullQuestion) {
                 res.status(201);
                 res.setHeader('Last-Modified', fullQuestion.dateModified.toUTCString());
+                res.setHeader('Location', fullQuestion.href());
                 return res.json(fullQuestion.renderLong());
             });
         });

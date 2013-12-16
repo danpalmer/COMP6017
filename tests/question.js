@@ -41,6 +41,25 @@ describe('/question', function () {
         });
     });
 
+    it('should return a valid Location header on create', function (done) {
+        var title = 'title',
+            content = 'content';
+        util.createUser(function (user) {
+            request.post({
+                url: host + '/question',
+                json: true,
+                form: {
+                    title: title,
+                    content: content,
+                    author_id: user.id
+                }
+            }, function (error, response) {
+                expect(response.headers.location).to.be('/question/' + response.body.id);
+                done();
+            });
+        });
+    });
+
     it('should return 400 for POST without required fields', function (done) {
         util.createUser(function (user) {
             request.post({

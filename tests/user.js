@@ -29,6 +29,13 @@ describe('/user', function () {
         });
     });
 
+    it('should return a valid Location header on create', function (done) {
+        request.post({url: host + '/user', json: true, form: {'name': 'foo', 'email': 'bar@example.com', 'dateSignedUp': Date.now()}}, function (error, response) {
+            expect(response.headers.location).to.be('/user/' + response.body.id);
+            done();
+        });
+    });
+
     it('should return 400 for POST without required fields', function (done) {
         request.post(host + '/user', {form: {}}, function (error, response) {
             expect(response.statusCode).to.be(400);

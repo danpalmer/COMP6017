@@ -48,6 +48,25 @@ describe('/question/:id/comment', function () {
         });
     });
 
+    it('should return a valid Location header on create', function (done) {
+        var content = 'lorem ipsum';
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                request.post({
+                    url: host + '/question/' + question.id + '/comment',
+                    form: {
+                        content: content,
+                        author_id: user.id
+                    },
+                    json: true
+                }, function (error, response) {
+                    expect(response.headers.location).to.be('/question/' + question.id + '/comment/' + response.body.id);
+                    done();
+                });
+            });
+        });
+    });
+
     it('should return 400 for POST without required fields', function (done) {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
@@ -540,6 +559,31 @@ describe('/question/:id/answer/:id/comment', function () {
                                 }
                             }, function (error, response) {
                                 expect(response.statusCode).to.be(201);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should return a valid Location header on create', function (done) {
+        var content = 'content';
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            request.post({
+                                url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment',
+                                form: {
+                                    content: content,
+                                    author_id: commenter.id
+                                },
+                                json: true
+                            }, function (error, response) {
+                                expect(response.headers.location).to.be('/question/' + question.id + '/answer/' + answer.id + '/comment/' + response.body.id);
                                 done();
                             });
                         });

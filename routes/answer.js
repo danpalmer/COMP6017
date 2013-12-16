@@ -64,6 +64,7 @@ exports.create = function (req, res) {
             req.models.answer.get(answer.id, function (aErr, fullAnswer) {
                 res.status(201);
                 res.setHeader('Last-Modified', fullAnswer.dateModified.toUTCString());
+                res.setHeader('Location', fullAnswer.href());
                 return res.json(fullAnswer.renderLong());
             });
         });
