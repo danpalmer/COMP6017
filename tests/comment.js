@@ -366,6 +366,25 @@ describe('/question/:id/comment/:id', function () {
             done();
         });
     });
+
+    it('should not modify dateModified for GET', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        var dateModified = comment.dateModified;
+                        request.get({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true
+                        }, function (error, response, body) {
+                            expect(body.dateModified).to.be(dateModified);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 describe('/question/:id/answer/:id/comment', function () {
@@ -865,6 +884,29 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                             expect(response.body.content).to.be(question.content);
                             expect(response.body._links.self.href).to.be('/question/' + question.id);
                             done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should not modify dateModified for GET', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                var dateModified = comment.dateModified;
+                                request.get({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true
+                                }, function (error, response, body) {
+                                    expect(body.dateModified).to.be(dateModified);
+                                    done();
+                                });
+                            });
                         });
                     });
                 });

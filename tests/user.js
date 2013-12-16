@@ -230,7 +230,16 @@ describe('/user/:id', function () {
         });
     });
 
-    // PUT should update an existing user
-    // PUT should return 404 for unknown user
-
+    it('should not modify dateModified for GET', function (done) {
+        util.createUser(function (user) {
+            var dateModified = user.dateModified;
+            request.get({
+                url: host + '/user/' + user.id,
+                json: true
+            }, function (error, response, body) {
+                expect(body.dateModified).to.be(dateModified);
+                done();
+            });
+        });
+    });
 });
