@@ -88,6 +88,12 @@ Extra Returned Fields:
  - **dateCreated**: Date, Read-Only.
  - **dateModified**: Date, Read-Only.
 
+Linked/Embedded Resources:
+
+ - **author**: User.
+ - **comments**: List of Comments
+ - **answers**: List of Answers
+
 ##### Answer
 
 User Provided Fields:
@@ -99,6 +105,12 @@ Extra Returned Fields:
 
  - **dateCreated**: Date, Read-Only.
  - **dateModified**: Date, Read-Only.
+
+Linked/Embedded Resources:
+
+ - **question**: Question.
+ - **author**: User.
+ - **comments**: List of Comments
 
 
 ##### Comment
@@ -112,6 +124,11 @@ Extra Returned Fields:
 
  - **dateCreated**: Date, Read-Only.
  - **dateModified**: Date, Read-Only.
+
+Linked/Embedded Resources:
+
+ - **parent**: Question/Answer.
+ - **author**: User.
 
 
 ### Design Decisions
