@@ -244,6 +244,7 @@ We have complied with JSLint, when run with the following options: `--node --dev
 ### To Do
 
  - Finish status code checks
+ - Make it so that 400 is responded with when POSTing with invalid field (i.e author_id: '99999')
 
  /question
  	- Just question objects, link to comment lists, link to author

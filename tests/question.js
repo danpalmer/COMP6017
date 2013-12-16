@@ -55,6 +55,27 @@ describe('/question', function () {
         });
     });
 
+    it('should return 400 for POST with invalid fields', function (done) {
+        var title = 'title',
+            content = 'content';
+        util.createUser(function (user) {
+            request.post({
+                url: host + '/question',
+                json: true,
+                form: {
+                    title: title,
+                    content: content,
+                    author_id: '99999'
+                }
+            }, function (error, response) {
+                expect(response.statusCode).to.be(400);
+                done();
+            });
+        });
+    });
+
+
+
     it('server should respond for HEAD', function (done) {
         request.head(host + '/question', function (error, response) {
             expect(response).to.not.be(undefined);
