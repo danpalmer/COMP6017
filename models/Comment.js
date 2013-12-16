@@ -30,9 +30,8 @@ module.exports.define = function (db, models) {
             href: function () {
                 var url, answer;
                 if (this.answer_id) {
-                    answer = this.getAnswer();
-                    url = '/question/' + answer.question_id +
-                                '/answer/' + answer.id +
+                    url = '/question/' + this.answer.question_id +
+                                '/answer/' + this.answer_id +
                                 '/comment/' + this.id;
                 } else {
                     url = '/question/' + this.question_id +
