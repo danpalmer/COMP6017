@@ -411,7 +411,7 @@ describe('/question/:id/comment/:id', function () {
         util.createUser(function (user) {
             util.createQuestion(user.id, function (question) {
                 util.createUser(function (commenter) {
-                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {                        
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
                         var dateModified = comment.dateModified, content = "foo";
                         request.put({
                             url: host + '/question/' + question.id + '/comment/' + comment.id,
