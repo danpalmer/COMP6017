@@ -2,7 +2,7 @@
 
 ### API Endpoints
 
-All endpoints reutrn `application/javascript` unless otherwise stated. All endpoints will respond to the **HEAD** method with the appropriate headers, and **OPTIONS** with the available methods for a given endpoint.
+All endpoints return `application/javascript` unless otherwise stated. All endpoints will respond to the **HEAD** method with the appropriate headers, and **OPTIONS** with the available methods for a given endpoint.
 
 ##### /
  - **GET**: if the request header specifies `Accept: application/json` (or the HAL variant), then this returns the valid links formatted in JSON HAL, otherwise this returns the README formatted as `text/html`.
