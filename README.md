@@ -243,7 +243,7 @@ We have complied with JSLint, when run with the following options: `--node --dev
 
 ### To Do
 
- - Test it is changed on POST and PUT
+ - Test it is changed on POST
  - Test whether returned objects (for GET) are valid
 
  /question
