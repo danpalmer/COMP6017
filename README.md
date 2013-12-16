@@ -243,7 +243,6 @@ We have complied with JSLint, when run with the following options: `--node --dev
 
 ### To Do
 
- - Test last modified not changed on idempotent methods (HEAD, GET)
  - Test it is changed on POST and PUT
  - Test whether returned objects (for GET) are valid
 
