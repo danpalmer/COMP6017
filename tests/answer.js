@@ -379,4 +379,25 @@ describe('/question/:id/answer/:id', function () {
             });
         });
     });
+
+    it('should not modify dateModified for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        //this evens out date resolution issues
+                        var dateModified = Date.parse(new Date(Date.parse(answer.dateModified)).toUTCString());
+                        request.head({
+                            url: host + '/question/' + question.id + '/answer/' + answer.id,
+                            json: true
+                        }, function (error, response) {
+                            var responseDateMod = Date.parse(response.headers['last-modified']);
+                            expect(responseDateMod).to.be(dateModified);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });

@@ -385,6 +385,27 @@ describe('/question/:id/comment/:id', function () {
             });
         });
     });
+
+    it('should not modify dateModified for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (commenter) {
+                    util.createComment(commenter.id, util.type.QUESTION, question.id, null, function (comment) {
+                        //this evens out date resolution issues
+                        var dateModified = Date.parse(new Date(Date.parse(comment.dateModified)).toUTCString());
+                        request.get({
+                            url: host + '/question/' + question.id + '/comment/' + comment.id,
+                            json: true
+                        }, function (error, response) {
+                            var responseDateMod = Date.parse(response.headers['last-modified']);
+                            expect(responseDateMod).to.be(dateModified);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 describe('/question/:id/answer/:id/comment', function () {
@@ -843,6 +864,31 @@ describe('/question/:id/answer/:id/comment/:id', function () {
                                     json: true
                                 }, function (error, response, body) {
                                     expect(body.dateModified).to.be(dateModified);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should not modify dateModified for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                util.createUser(function (answerer) {
+                    util.createAnswer(answerer.id, question.id, function (answer) {
+                        util.createUser(function (commenter) {
+                            util.createComment(commenter.id, util.type.ANSWER, question.id, answer.id, function (comment) {
+                                //this evens out date resolution issues
+                                var dateModified = Date.parse(new Date(Date.parse(comment.dateModified)).toUTCString());
+                                request.head({
+                                    url: host + '/question/' + question.id + '/answer/' + answer.id + '/comment/' + comment.id,
+                                    json: true
+                                }, function (error, response) {
+                                    var responseDateMod = Date.parse(response.headers['last-modified']);
+                                    expect(responseDateMod).to.be(dateModified);
                                     done();
                                 });
                             });

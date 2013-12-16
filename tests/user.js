@@ -242,4 +242,19 @@ describe('/user/:id', function () {
             });
         });
     });
+
+    it('should not modify dateModified for HEAD', function (done) {
+        util.createUser(function (user) {
+            //this evens out date resolution issues
+            var dateModified = Date.parse(new Date(Date.parse(user.dateModified)).toUTCString());
+            request.head({
+                url: host + '/user/' + user.id,
+                json: true
+            }, function (error, response) {
+                var responseDateMod = Date.parse(response.headers['last-modified']);
+                expect(responseDateMod).to.be(dateModified);
+                done();
+            });
+        });
+    });
 });

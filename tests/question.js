@@ -291,4 +291,21 @@ describe('/question/:id', function () {
             });
         });
     });
+
+    it('should not modify dateModified for HEAD', function (done) {
+        util.createUser(function (user) {
+            util.createQuestion(user.id, function (question) {
+                //this evens out date resolution issues
+                var dateModified = Date.parse(new Date(Date.parse(question.dateModified)).toUTCString());
+                request.head({
+                    url: host + '/question/' + question.id,
+                    json: true
+                }, function (error, response) {
+                    var responseDateMod = Date.parse(response.headers['last-modified']);
+                    expect(responseDateMod).to.be(dateModified);
+                    done();
+                });
+            });
+        });
+    });
 });
