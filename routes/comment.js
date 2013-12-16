@@ -1,3 +1,14 @@
+/*
+    Route handlers relating to Comment resources.
+    GET -> get/list for single/multiple
+    POST -> create
+    PUT -> update
+    DELETE -> del
+
+    Note that comments can be related to either an answer or a model.
+    To differentiate requests, a 'model' argument is passed to all
+    handlers, and is a string containing either 'question' or 'answer'.
+*/
 var utils = require('../util.js');
 var _ = require('underscore');
 

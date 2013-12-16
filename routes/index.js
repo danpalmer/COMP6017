@@ -1,3 +1,14 @@
+/*
+    Route handler for the root URL.
+
+    If the content type accepted by the client is JSON or JSON HAL, then
+    we return a list of links to valid endpoints that can be accessed from here:
+    /user and /question.
+
+    If the content type is not one of these, then we assume that it is being requested
+    by a web browser or something other than an API client, and we return the README
+    for the project rendered from Markdown to HTML.
+*/
 var markdown = require('marked');
 var fs = require('fs');
 

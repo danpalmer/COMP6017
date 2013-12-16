@@ -1,3 +1,10 @@
+/*
+    Route handlers relating to User resources.
+    GET -> get/list for single/multiple
+    POST -> create
+    PUT -> update
+    DELETE -> del
+*/
 var utils = require('../util.js');
 var _ = require('underscore');
 
