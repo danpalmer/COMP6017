@@ -243,7 +243,7 @@ We have complied with JSLint, when run with the following options: `--node --dev
 
 ### To Do
 
- - Test whether returned objects (for GET) are valid
+ - Finish status code checks
 
  /question
  	- Just question objects, link to comment lists, link to author
